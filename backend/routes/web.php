@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+// 日報管理用controller
+use App\Http\Controllers\ReportController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,3 +34,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/design', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/task', function () {
     return Inertia\Inertia::render('Task');
 })->name('task');
+
+
+Route::resource('posts', ReportController::class);
