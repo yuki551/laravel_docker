@@ -7,7 +7,7 @@ use Inertia\Inertia;
 use App\Models\Post;
 use Illuminate\Support\Facades\Validator;
 
-class ReportController extends Controller
+class PostController extends Controller
 {
     /**
      * Show the form for creating a new resource.
