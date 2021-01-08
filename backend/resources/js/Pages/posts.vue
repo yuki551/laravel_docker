@@ -24,14 +24,14 @@
                             <div class="">
                                 <div class="mb-4">
                                     <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2"
-                                        >名前:</label
-                                    >
+                                        >名前:
+                                    </label>
                                     <input
                                         type="text"
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         id="exampleFormControlInput1"
                                         placeholder="Enter Title"
-                                        v-model="form.title"
+                                        v-model="$page.user.name"
                                     />
                                     <div v-if="$page.errors.title" class="text-red-500">
                                         {{ $page.errors.title[0] }}
@@ -61,7 +61,7 @@
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         id="exampleFormControlInput1"
                                         placeholder="Enter Title"
-                                        v-model="form.title"
+                                        v-model="$page.user.current_team_id"
                                     />
                                     <div v-if="$page.errors.title" class="text-red-500">
                                         {{ $page.errors.title[0] }}
