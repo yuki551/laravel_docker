@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 // 日報管理用controller
 use App\Http\Controllers\PostController;
 /*
@@ -17,23 +18,8 @@ use App\Http\Controllers\PostController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::redirect('/', '/dashboard');
+Route::redirect('/', 'dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia\Inertia::render('Dashboard');
-})->name('dashboard');
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/dailyreport', function () {
-    return Inertia\Inertia::render('Dailyreport');
-})->name('dailyreport');
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/design', function () {
-    return Inertia\Inertia::render('Design');
-})->name('design');
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/task', function () {
-    return Inertia\Inertia::render('Task');
-})->name('task');
-
+Route::resource('dashboard', HomeController::class);
 // 日報管理用controllerへroute
 Route::resource('posts', PostController::class);

@@ -7,31 +7,20 @@
                     <div class="flex">
                         <!-- Logo -->
                         <div class="flex-shrink-0 flex items-center">
-                            <inertia-link :href="route('dashboard')">
+                            <inertia-link href="/dashboard">
                                 <jet-application-mark class="block h-9 w-auto" />
                             </inertia-link>
                         </div>
-
                         <!-- Navigation Links -->
-                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
-                                Dashboard
+                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                            <jet-nav-link href="/dashboard" :active="route().current('dashboard.index')">
+                                ホーム
                             </jet-nav-link>
                         </div>
 
-                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <jet-nav-link :href="route('dailyreport')" :active="route().current('dailyreport')">
-                                DailyReport
-                            </jet-nav-link>
-                        </div>
-                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <jet-nav-link :href="route('design')" :active="route().current('design')">
-                                Design
-                            </jet-nav-link>
-                        </div>
-                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <jet-nav-link :href="route('task')" :active="route().current('task')">
-                                Task
+                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                            <jet-nav-link href="/posts" :active="route().current('posts.index')">
+                                日報
                             </jet-nav-link>
                         </div>
                     </div>
@@ -184,7 +173,7 @@
             <!-- Responsive Navigation Menu -->
             <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }" class="sm:hidden">
                 <div class="pt-2 pb-3 space-y-1">
-                    <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
+                    <jet-responsive-nav-link href="/dashboard" :active="route().current('dashboard.index')">
                         Dashboard
                     </jet-responsive-nav-link>
                 </div>
