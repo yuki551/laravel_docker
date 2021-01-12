@@ -20,7 +20,7 @@ class PostController extends Controller
     public function index()
     {
 
-        $userTeam = Auth::user();;
+        $userTeam = Auth::user();
         $userTeam = $userTeam->currentTeam->name;
 
 
