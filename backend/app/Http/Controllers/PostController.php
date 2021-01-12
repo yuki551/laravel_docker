@@ -7,6 +7,9 @@ use Inertia\Inertia;
 use App\Models\Post;
 use Illuminate\Support\Facades\Validator;
 
+use Laravel\Jetstream\HasTeams;
+use Illuminate\Support\Facades\Auth;
+
 class PostController extends Controller
 {
     /**
@@ -16,8 +19,13 @@ class PostController extends Controller
      */
     public function index()
     {
+
+        $userTeam = Auth::user();;
+        $userTeam = $userTeam->currentTeam->name;
+
+
         $data = Post::all();
-        return Inertia::render('posts', ['data' => $data]);
+        return Inertia::render('posts', ['data' => $data, 'userTeam' => $userTeam]);
     }
 
     /**

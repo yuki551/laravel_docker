@@ -1,9 +1,7 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Manage Post - (Laravel 8 Inertia JS CRUD with Jetstream & Tailwind CSS - ItSolutionStuff.com)
-            </h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight"></h2>
         </template>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -31,7 +29,7 @@
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         id="exampleFormControlInput1"
                                         placeholder="Enter Title"
-                                        v-model="$page.user.name"
+                                        v-model="form.name"
                                     />
                                     <div v-if="$page.errors.title" class="text-red-500">
                                         {{ $page.errors.title[0] }}
@@ -61,7 +59,7 @@
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         id="exampleFormControlInput1"
                                         placeholder="Enter Title"
-                                        v-model="$page.user.current_team_id"
+                                        v-model="form.team"
                                     />
                                     <div v-if="$page.errors.title" class="text-red-500">
                                         {{ $page.errors.title[0] }}
@@ -71,32 +69,29 @@
                                     <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2"
                                         >業務報告(午前):</label
                                     >
-                                    <input
-                                        type="text"
-                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        id="exampleFormControlInput1"
-                                        placeholder="Enter Title"
-                                        v-model="form.title"
-                                    />
+                                    <div>
+                                        <p>Selected: {{ selectedValue }}</p>
+                                        <FilterableDropdown
+                                            v-model="selectedValue"
+                                            :items="items"
+                                            :showEmptyItem="true"
+                                            :disabled="false"
+                                            :ignoreCase="true"
+                                            emptyItemValue="SAMPLE_EMPTY_VALUE"
+                                            emptyItemText=""
+                                            placeholder="業務内容を選択してください。"
+                                            name="fruit"
+                                            idKey="id"
+                                            valueKey="name"
+                                            textKey="name"
+                                            filterTargetKey="name"
+                                        />
+                                    </div>
                                     <div v-if="$page.errors.title" class="text-red-500">
                                         {{ $page.errors.title[0] }}
                                     </div>
                                 </div>
-                                <div class="mb-4">
-                                    <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2"
-                                        >業務内容(フリーワード):</label
-                                    >
-                                    <input
-                                        type="text"
-                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        id="exampleFormControlInput1"
-                                        placeholder="Enter Title"
-                                        v-model="form.title"
-                                    />
-                                    <div v-if="$page.errors.title" class="text-red-500">
-                                        {{ $page.errors.title[0] }}
-                                    </div>
-                                </div>
+
                                 <div class="mb-4">
                                     <textarea
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -112,13 +107,24 @@
                                     <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2"
                                         >業務報告(午後):</label
                                     >
-                                    <input
-                                        type="text"
-                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        id="exampleFormControlInput1"
-                                        placeholder="Enter Title"
-                                        v-model="form.title"
-                                    />
+                                    <div>
+                                        <p>Selected: {{ selectedValue }}</p>
+                                        <FilterableDropdown
+                                            v-model="selectedValue"
+                                            :items="items"
+                                            :showEmptyItem="true"
+                                            :disabled="false"
+                                            :ignoreCase="true"
+                                            emptyItemValue="SAMPLE_EMPTY_VALUE"
+                                            emptyItemText=""
+                                            placeholder="業務内容を選択してください。"
+                                            name="fruit"
+                                            idKey="id"
+                                            valueKey="name"
+                                            textKey="name"
+                                            filterTargetKey="name"
+                                        />
+                                    </div>
                                     <div v-if="$page.errors.title" class="text-red-500">
                                         {{ $page.errors.title[0] }}
                                     </div>
@@ -185,43 +191,14 @@
                             </span>
                         </div>
                     </form>
-                    <!-- <table class="table-fixed w-full">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="px-4 py-2 w-20">No.</th>
-                                <th class="px-4 py-2">Title</th>
-                                <th class="px-4 py-2">Body</th>
-                                <th class="px-4 py-2">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="row in data">
-                                <td class="border px-4 py-2">{{ row.id }}</td>
-                                <td class="border px-4 py-2">{{ row.title }}</td>
-                                <td class="border px-4 py-2">{{ row.body }}</td>
-                                <td class="border px-4 py-2">
-                                    <button
-                                        @click="edit(row)"
-                                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        @click="deleteRow(row)"
-                                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table> -->
                 </div>
             </div>
         </div>
     </app-layout>
 </template>
 <script>
+import FilterableDropdown from './components/FilterableDropdown.vue';
+
 // 日付取得用
 var today = new Date();
 var today = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
@@ -233,6 +210,7 @@ export default {
     components: {
         AppLayout,
         Welcome,
+        FilterableDropdown,
     },
     props: ['data', 'errors'],
     data() {
@@ -240,10 +218,17 @@ export default {
             editMode: false,
             isOpen: false,
             form: {
+                name: this.$page.user.name,
+                team: this.$page.user.current_team.name,
                 date: today,
                 title: null,
                 body: null,
             },
+            selectedValue: null,
+            items: [
+                { id: 1, name: '出張' },
+                { id: 2, name: '会議' },
+            ],
         };
     },
     methods: {

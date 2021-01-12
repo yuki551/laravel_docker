@@ -145,7 +145,7 @@
     </app-layout>
 </template>
 <script>
-console.log('s');
+console.log('sss');
 import AppLayout from './../Layouts/AppLayout';
 import Welcome from './../Jetstream/Welcome';
 export default {
