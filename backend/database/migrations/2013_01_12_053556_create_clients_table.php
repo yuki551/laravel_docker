@@ -14,13 +14,13 @@ class CreateClientsTable extends Migration
     public function up()
     {
         Schema::create('clients', function (Blueprint $table) {
-            $table->char('id', 4)->primary('id')->autoIncrement();
+            $table->char('id', 4)->primary('id')->autoIncrement()->default(0000);
             $table->string('name');
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
-            $table->char('created_user_id', 4);
-            $table->char('updated_user_id', 4);
-            $table->boolean('deleted_flag');
+            $table->char('created_user_id', 4)->default(0000);
+            $table->char('updated_user_id', 4)->default(0000);
+            $table->boolean('deleted_flag')->nullable();
         });
     }
 

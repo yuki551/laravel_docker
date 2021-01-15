@@ -30,7 +30,7 @@ class CreatePostsTable extends Migration
             $table->timestamp('updated_at')->useCurrent()->nullable();
             $table->timestamp('created_user_id')->useCurrent()->nullable();
             $table->timestamp('updated_user_id')->useCurrent()->nullable();
-            $table->boolean('deleted_flag');
+            $table->boolean('deleted_flag')->nullable();
 
             $table->foreign('user')->references('id')->on('users');
             $table->foreign('team')->references('id')->on('teams');
