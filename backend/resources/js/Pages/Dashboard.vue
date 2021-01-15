@@ -147,11 +147,9 @@
 <script>
 console.log('sss');
 import AppLayout from './../Layouts/AppLayout';
-import Welcome from './../Jetstream/Welcome';
 export default {
     components: {
         AppLayout,
-        Welcome,
     },
     props: ['data', 'errors'],
     data() {
