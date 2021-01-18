@@ -8,10 +8,8 @@
             ref="textBox"
             type="text"
             class="fd__display-textbox"
-            :disabled="disabled"
             :value="displayText"
             :placeholder="placeholder"
-            readonly="readonly"
             @click="textBoxClicked"
         />
         <div class="fd__list" v-show="showList">
@@ -26,7 +24,7 @@
             </div>
             <ul>
                 <li class="fd__item" v-if="showEmptyItem" :value="emptyItemValue" @click.stop.prevent="itemClicked(null)">
-                    {{ emptyItemText || '&nbsp;' }}
+                    {{ emptyItemText || filterString }}
                 </li>
                 <li
                     class="fd__item"
