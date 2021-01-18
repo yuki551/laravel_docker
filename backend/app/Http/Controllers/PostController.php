@@ -7,9 +7,6 @@ use Inertia\Inertia;
 use App\Models\Post;
 use Illuminate\Support\Facades\Validator;
 
-use Laravel\Jetstream\HasTeams;
-use Illuminate\Support\Facades\Auth;
-
 class PostController extends Controller
 {
     /**
@@ -19,13 +16,8 @@ class PostController extends Controller
      */
     public function index()
     {
-
-        $userTeam = Auth::user();
-        $userTeam = $userTeam->currentTeam->name;
-
-
         $data = Post::all();
-        return Inertia::render('posts', ['data' => $data, 'userTeam' => $userTeam]);
+        return Inertia::render('posts', ['data' => $data]);
     }
 
     /**
@@ -35,9 +27,16 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+
+        //user id と team id が整合性取れる場合のみ入力できる様にしたい
         Validator::make($request->all(), [
-            'title' => ['required'],
-            'body' => ['required'],
+            'user' => ['required'],
+            'team' => ['required'],
+            // 'date' => ['required'],
+            'summary_am' => ['required'],
+            'contents_am' => ['required'],
+            'summary_pm' => ['required'],
+            'contents_pm' => ['required'],
         ])->validate();
 
         Post::create($request->all());

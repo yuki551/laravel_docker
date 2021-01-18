@@ -24,16 +24,23 @@
                         <thead>
                             <tr class="bg-gray-100">
                                 <th class="px-4 py-2 w-20">No.</th>
-                                <th class="px-4 py-2">Title</th>
-                                <th class="px-4 py-2">Body</th>
-                                <th class="px-4 py-2">Action</th>
+                                <th class="px-4 py-2">summary_am</th>
+                                <th class="px-4 py-2">client_am</th>
+                                <th class="px-4 py-2">contents_am</th>
+                                <th class="px-4 py-2">summary_pm</th>
+                                <th class="px-4 py-2">client_pm</th>
+                                <th class="px-4 py-2">contents_pm</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="row in data">
                                 <td class="border px-4 py-2">{{ row.id }}</td>
-                                <td class="border px-4 py-2">{{ row.title }}</td>
-                                <td class="border px-4 py-2">{{ row.body }}</td>
+                                <td class="border px-4 py-2">{{ row.summary_am }}</td>
+                                <td class="border px-4 py-2">{{ row.client_am }}</td>
+                                <td class="border px-4 py-2">{{ row.contents_am }}</td>
+                                <td class="border px-4 py-2">{{ row.summary_pm }}</td>
+                                <td class="border px-4 py-2">{{ row.client_pm }}</td>
+                                <td class="border px-4 py-2">{{ row.contents_pm }}</td>
                                 <td class="border px-4 py-2">
                                     <button
                                         @click="edit(row)"
@@ -145,7 +152,6 @@
     </app-layout>
 </template>
 <script>
-console.log('sss');
 import AppLayout from './../Layouts/AppLayout';
 export default {
     components: {
