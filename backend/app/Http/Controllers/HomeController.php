@@ -7,6 +7,10 @@ use Inertia\Inertia;
 use App\Models\Post;
 use Illuminate\Support\Facades\Validator;
 
+// user情報取得用
+use Illuminate\Support\Facades\Auth;
+
+
 class HomeController extends Controller
 {
     /**
@@ -17,7 +21,13 @@ class HomeController extends Controller
     public function index()
     {
         $data = Post::all();
-        return Inertia::render('dashboard', ['data' => $data]);
+        $user = Auth::user();
+
+        if ($user == null) {
+            return redirect()->route('login');
+        } else {
+            return Inertia::render('dashboard', ['data' => $data]);
+        }
     }
 
     /**
