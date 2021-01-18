@@ -164,6 +164,7 @@
                                 </button>
                             </span>
                         </div>
+                        <input type="hidden" v-model="form.status" />
                     </form>
                 </div>
             </div>
@@ -196,6 +197,7 @@ export default {
                 date: today,
                 contents_am: null,
                 contents_pm: null,
+                status: 1,
             },
             created_user_id: this.$page.user.id,
             summary_am: null,

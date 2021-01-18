@@ -7,6 +7,10 @@ use Inertia\Inertia;
 use App\Models\Post;
 use Illuminate\Support\Facades\Validator;
 
+// config呼び出し用
+// var_dump(config('setting.hierarchy'));
+var_dump(config('setting.status'));
+
 class PostController extends Controller
 {
     /**
@@ -16,6 +20,7 @@ class PostController extends Controller
      */
     public function index()
     {
+
         $data = Post::all();
         return Inertia::render('posts', ['data' => $data]);
     }
@@ -37,6 +42,7 @@ class PostController extends Controller
             'contents_am' => ['required'],
             'summary_pm' => ['required'],
             'contents_pm' => ['required'],
+            'status' => ['required'],
         ])->validate();
 
         Post::create($request->all());
