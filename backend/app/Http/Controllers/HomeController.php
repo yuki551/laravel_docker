@@ -22,11 +22,12 @@ class HomeController extends Controller
     {
         $data = Post::all();
         $user = Auth::user();
+        $conf = config('setting.status');
 
         if ($user == null) {
             return redirect()->route('login');
         } else {
-            return Inertia::render('dashboard', ['data' => $data]);
+            return Inertia::render('dashboard', ['data' => $data, 'conf' => $conf]);
         }
     }
 

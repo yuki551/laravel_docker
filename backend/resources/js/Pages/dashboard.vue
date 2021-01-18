@@ -23,7 +23,8 @@
                     <table class="table-fixed w-full">
                         <thead>
                             <tr class="bg-gray-100">
-                                <th class="px-4 py-2 w-20">No.</th>
+                                <th class="px-4 py-2 w-20">created</th>
+                                <th class="px-4 py-2 w-20">status</th>
                                 <th class="px-4 py-2">summary_am</th>
                                 <th class="px-4 py-2">client_am</th>
                                 <th class="px-4 py-2">contents_am</th>
@@ -35,7 +36,8 @@
                         </thead>
                         <tbody>
                             <tr v-for="row in userPosts">
-                                <td class="border px-4 py-2">{{ row.id }}</td>
+                                <td class="border px-4 py-2">{{ row.created_at }}</td>
+                                <td class="border px-4 py-2">{{ conf[row.status] }}</td>
                                 <td class="border px-4 py-2">{{ row.summary_am }}</td>
                                 <td class="border px-4 py-2">{{ row.client_am }}</td>
                                 <td class="border px-4 py-2">{{ row.contents_am }}</td>
@@ -156,15 +158,11 @@ export default {
     components: {
         AppLayout,
     },
-    props: ['data', 'errors'],
+    props: ['data', 'errors', 'conf'],
     data() {
         return {
             editMode: false,
             isOpen: false,
-            form: {
-                title: null,
-                body: null,
-            },
             userPost: [],
         };
     },
