@@ -30,10 +30,11 @@
                                 <th class="px-4 py-2">summary_pm</th>
                                 <th class="px-4 py-2">client_pm</th>
                                 <th class="px-4 py-2">contents_pm</th>
+                                <th class="px-4 py-2">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="row in data">
+                            <tr v-for="row in userPosts">
                                 <td class="border px-4 py-2">{{ row.id }}</td>
                                 <td class="border px-4 py-2">{{ row.summary_am }}</td>
                                 <td class="border px-4 py-2">{{ row.client_am }}</td>
@@ -41,20 +42,18 @@
                                 <td class="border px-4 py-2">{{ row.summary_pm }}</td>
                                 <td class="border px-4 py-2">{{ row.client_pm }}</td>
                                 <td class="border px-4 py-2">{{ row.contents_pm }}</td>
-                                <td class="border px-4 py-2">
-                                    <button
-                                        @click="edit(row)"
-                                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        @click="deleteRow(row)"
-                                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
+                                <button
+                                    @click="edit(row)"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    @click="deleteRow(row)"
+                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                >
+                                    Delete
+                                </button>
                             </tr>
                         </tbody>
                     </table>
@@ -166,7 +165,19 @@ export default {
                 title: null,
                 body: null,
             },
+            userPost: [],
         };
+    },
+    computed: {
+        // ログインしているユーザーの投稿のみデータを格納。
+        userPosts: function() {
+            for (let i = 0; i < this.data.length; i++) {
+                if (this.data[i].user == this.$page.user.id) {
+                    this.userPost.push(this.data[i]);
+                }
+            }
+            return this.userPost;
+        },
     },
     methods: {
         openModal: function() {
@@ -210,3 +221,4 @@ export default {
     },
 };
 </script>
+<style></style>
