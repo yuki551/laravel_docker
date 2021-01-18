@@ -25,8 +25,8 @@ class CreateUsersTable extends Migration
 
             $table->timestamps();
 
-            $table->integer('created_user_id')->default(0000);
-            $table->integer('updated_user_id')->default(0000);
+            $table->integer('created_user_id')->nullable();
+            $table->integer('updated_user_id')->nullable();
             $table->boolean('deleted_flag')->nullable();
 
             $table->timestamp('email_verified_at')->nullable();

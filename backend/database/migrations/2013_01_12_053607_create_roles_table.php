@@ -18,8 +18,8 @@ class CreateRolesTable extends Migration
             $table->string('name');
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
-            $table->char('created_user_id', 4);
-            $table->char('updated_user_id', 4);
+            $table->integer('created_user_id')->nullable();
+            $table->integer('updated_user_id')->nullable();
             $table->boolean('deleted_flag')->nullable();
         });
     }

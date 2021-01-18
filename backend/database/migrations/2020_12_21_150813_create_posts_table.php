@@ -16,20 +16,20 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user');
-            $table->integer('team');
-            $table->string('summary_am');
-            $table->integer('client_am');
-            $table->text('contents_am');
-            $table->string('summary_pm');
-            $table->integer('client_pm');
-            $table->text('contents_pm');
-            $table->integer('status');
-            $table->timestamp('status_updated_at');
+            $table->integer('user')->nullable();
+            $table->integer('team')->nullable();
+            $table->string('summary_am')->nullable();
+            $table->integer('client_am')->nullable();
+            $table->text('contents_am')->nullable();
+            $table->string('summary_pm')->nullable();
+            $table->integer('client_pm')->nullable();
+            $table->text('contents_pm')->nullable();
+            $table->integer('status')->nullable();
+            $table->timestamp('status_updated_at')->nullable();
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
-            $table->timestamp('created_user_id')->useCurrent()->nullable();
-            $table->timestamp('updated_user_id')->useCurrent()->nullable();
+            $table->integer('created_user_id')->nullable();
+            $table->integer('updated_user_id')->nullable();
             $table->boolean('deleted_flag')->nullable();
 
             $table->foreign('user')->references('id')->on('users');
