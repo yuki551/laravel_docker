@@ -31,6 +31,9 @@
                                 <th class="px-4 py-2">summary_pm</th>
                                 <th class="px-4 py-2">client_pm</th>
                                 <th class="px-4 py-2">contents_pm</th>
+
+                                <th class="px-4 py-2">Team</th>
+                                <th class="px-4 py-2">userid</th>
                                 <th class="px-4 py-2">Action</th>
                             </tr>
                         </thead>
@@ -44,6 +47,8 @@
                                 <td class="border px-4 py-2">{{ row.summary_pm }}</td>
                                 <td class="border px-4 py-2">{{ row.client_pm }}</td>
                                 <td class="border px-4 py-2">{{ row.contents_pm }}</td>
+                                <td class="border px-4 py-2">{{ row.team }}</td>
+                                <td class="border px-4 py-2">{{ row.user }}</td>
                                 <button
                                     @click="edit(row)"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -169,11 +174,25 @@ export default {
     computed: {
         // ログインしているユーザーの投稿のみデータを格納。
         userPosts: function() {
-            for (let i = 0; i < this.data.length; i++) {
-                if (this.data[i].user == this.$page.user.id) {
-                    this.userPost.push(this.data[i]);
+            //user idが同じ時
+            if (this.$page.user.role_id == 1) {
+                for (let i = 0; i < this.data.length; i++) {
+                    if (this.data[i].user == this.$page.user.id) {
+                        this.userPost.push(this.data[i]);
+                    }
                 }
+            } else if (this.$page.user.role_id == 5) {
+                //部長role
+                for (let i = 0; i < this.data.length; i++) {
+                    if (this.data[i].team == this.$page.user.current_team_id) {
+                        this.userPost.push(this.data[i]);
+                    }
+                }
+            } else if (this.$page.user.role_id == 10) {
+                //社長role
+                return this.data;
             }
+
             return this.userPost;
         },
     },
