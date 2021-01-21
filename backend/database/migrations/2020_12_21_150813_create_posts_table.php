@@ -32,7 +32,6 @@ class CreatePostsTable extends Migration
             $table->integer('updated_user_id')->nullable();
             $table->boolean('deleted_flag')->nullable();
 
-            $table->foreign('user')->references('id')->on('users');
             $table->foreign('team')->references('id')->on('teams');
 
             $table->foreign('client_am')->references('id')->on('clients');
