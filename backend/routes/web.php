@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+// dashboard controller
 use App\Http\Controllers\HomeController;
 // 日報管理用controller
 use App\Http\Controllers\PostController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,11 +17,14 @@ use App\Http\Controllers\PostController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('login');
+});
+
 Route::redirect('/', 'dashboard');
 
 Route::resource('dashboard', HomeController::class);
 // 日報管理用controllerへroute
 Route::resource('posts', PostController::class);
+
+Route::resource('admin', AdminController::class);
