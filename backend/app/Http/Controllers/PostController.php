@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 // config呼び出し用
 // var_dump(config('setting.hierarchy'));
-var_dump(config('setting.status'));
+// var_dump(config('setting.status'));
 
 class PostController extends Controller
 {

@@ -56,10 +56,12 @@
                                     Edit
                                 </button>
                                 <button
-                                    @click="deleteRow(row)"
+                                    type="button"
+                                    wire:click.prevent="store()"
+                                    @click="replyRow(row)"
                                     class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                                 >
-                                    Delete
+                                    差戻し
                                 </button>
                             </tr>
                         </tbody>
@@ -169,6 +171,9 @@ export default {
             editMode: false,
             isOpen: false,
             userPost: [],
+            form: {
+                status: 0,
+            },
         };
     },
     computed: {
@@ -197,14 +202,14 @@ export default {
         },
     },
     methods: {
-        openModal: function() {
-            this.isOpen = true;
-        },
-        closeModal: function() {
-            this.isOpen = false;
-            this.reset();
-            this.editMode = false;
-        },
+        // openModal: function() {
+        //     this.isOpen = true;
+        // },
+        // closeModal: function() {
+        //     this.isOpen = false;
+        //     this.reset();
+        //     this.editMode = false;
+        // },
         reset: function() {
             this.form = {
                 title: null,
@@ -228,13 +233,19 @@ export default {
             this.reset();
             this.closeModal();
         },
-        deleteRow: function(data) {
-            if (!confirm('Are you sure want to remove?')) return;
-            data._method = 'DELETE';
+        replyRow: function(data) {
+            data._method = 'PUT';
+            data['status'] = 3;
             this.$inertia.post('/dashboard/' + data.id, data);
-            this.reset();
-            this.closeModal();
+            console.log(data);
         },
+        // deleteRow: function(data) {
+        //     if (!confirm('Are you sure want to remove?')) return;
+        //     data._method = 'DELETE';
+        //     this.$inertia.post('/dashboard/' + data.id, data);
+        //     this.reset();
+        //     this.closeModal();
+        // },
     },
 };
 </script>

@@ -22,13 +22,19 @@ class HomeController extends Controller
     {
         $data = Post::all();
         $user = Auth::user();
+        // var_dump($data);
+
+        // var_dump($user["role_id"]);
         $conf = config('setting.status');
 
-        if ($user == null) {
-            return redirect()->route('login');
-        } else {
-            return Inertia::render('dashboard', ['data' => $data, 'conf' => $conf]);
-        }
+        return Inertia::render('dashboard', ['data' => $data, 'conf' => $conf]);
+
+        //管理者用ページ
+        // if ($user["role_id"] == 1) {
+        //     return Inertia::render('admin', ['data' => $data, 'conf' => $conf]);
+        // } else {
+        //     return Inertia::render('dashboard', ['data' => $data, 'conf' => $conf]);
+        // }
     }
 
     /**
@@ -57,8 +63,15 @@ class HomeController extends Controller
     public function update(Request $request)
     {
         Validator::make($request->all(), [
-            'title' => ['required'],
-            'body' => ['required'],
+            'user' => ['required'],
+            'team' => ['required'],
+            'summary_am' => ['required'],
+            'client_am' => ['required'],
+            'contents_am' => ['required'],
+            'summary_pm' => ['required'],
+            'client_pm' => ['required'],
+            'contents_pm' => ['required'],
+
         ])->validate();
 
         if ($request->has('id')) {
