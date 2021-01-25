@@ -17,4 +17,9 @@ class Post extends Model
     protected $fillable = [
         'user', 'team', 'contents_am', 'contents_pm', 'summary_am', 'summary_pm', 'created_user_id', 'status', 'comment'
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
 }
