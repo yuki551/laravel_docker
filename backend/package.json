@@ -28,6 +28,9 @@
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10"
     },
+    "rules": {
+        "no-console": 0
+    },
     "dependencies": {
         "@fullcalendar/daygrid": "^5.5.0",
         "@fullcalendar/interaction": "^5.5.0",

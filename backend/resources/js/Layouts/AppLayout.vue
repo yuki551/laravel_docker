@@ -18,13 +18,12 @@
                             </jet-nav-link>
                         </div>
 
-                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                        <div v-if="this.$page.user.role_id == 10" class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
                             <jet-nav-link href="/posts" :active="route().current('posts.index')">
                                 日報
                             </jet-nav-link>
                         </div>
                     </div>
-
                     <!-- Settings Dropdown -->
                     <div class="hidden sm:flex sm:items-center sm:ml-6">
                         <div class="text-indigo-600">{{ $page.user.current_team.name }}</div>
@@ -94,6 +93,12 @@
                                             Team Settings
                                         </jet-dropdown-link>
 
+                                        <jet-dropdown-link
+                                            :href="route('users.create')"
+                                            v-if="$page.jetstream.canCreateTeam"
+                                        >
+                                            Create New User
+                                        </jet-dropdown-link>
                                         <jet-dropdown-link
                                             :href="route('teams.create')"
                                             v-if="$page.jetstream.canCreateTeams"

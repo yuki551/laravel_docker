@@ -83,7 +83,8 @@ export default {
         },
         displayText() {
             const item = this.selectedItem;
-            if (!item) return '';
+            this.value = this.filterString;
+            if (!item) return this.value;
             return this.textKey ? item[this.textKey] : item;
         },
     },

@@ -1,7 +1,9 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight"></h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Post
+            </h2>
         </template>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -69,22 +71,13 @@
                                     <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2"
                                         >業務報告(午前):</label
                                     >
-                                    <div>
-                                        <!-- <p>Selected: {{ selectedValue }}</p> -->
-                                        <FilterableDropdown
-                                            v-model="form.summary_am"
-                                            :items="items"
-                                            :showEmptyItem="true"
-                                            :disabled="false"
-                                            :ignoreCase="true"
-                                            placeholder="業務内容を選択してください。"
-                                            name="fruit"
-                                            idKey="id"
-                                            valueKey="name"
-                                            textKey="name"
-                                            filterTargetKey="name"
-                                        />
-                                    </div>
+
+                                    <textarea
+                                        class="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        id="exampleFormControlInput2"
+                                        v-model="form.summary_am"
+                                        placeholder="業務"
+                                    ></textarea>
                                     <div v-if="$page.errors.title" class="text-red-500">
                                         {{ $page.errors.title[0] }}
                                     </div>
@@ -105,23 +98,13 @@
                                     <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2"
                                         >業務報告(午後):</label
                                     >
-                                    <div>
-                                        <FilterableDropdown
-                                            v-model="form.summary_pm"
-                                            :items="items"
-                                            :showEmptyItem="true"
-                                            :disabled="false"
-                                            :ignoreCase="true"
-                                            emptyItemValue="SAMPLE_EMPTY_VALUE"
-                                            emptyItemText=""
-                                            placeholder="業務内容を選択してください。"
-                                            name="fruit"
-                                            idKey="id"
-                                            valueKey="name"
-                                            textKey="name"
-                                            filterTargetKey="name"
-                                        />
-                                    </div>
+
+                                    <textarea
+                                        class="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        id="exampleFormControlInput2"
+                                        v-model="form.summary_pm"
+                                        placeholder="業務"
+                                    ></textarea>
                                     <div v-if="$page.errors.title" class="text-red-500">
                                         {{ $page.errors.title[0] }}
                                     </div>
@@ -140,7 +123,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                             <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
                                 <button
                                     wire:click.prevent="store()"
@@ -149,7 +132,7 @@
                                     v-show="!editMode"
                                     @click="save(form)"
                                 >
-                                    Save
+                                    提出
                                 </button>
                             </span>
                             <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">

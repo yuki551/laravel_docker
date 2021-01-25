@@ -24,6 +24,7 @@ class CreatePostsTable extends Migration
             $table->string('summary_pm')->nullable();
             $table->integer('client_pm')->nullable();
             $table->text('contents_pm')->nullable();
+            $table->text('comment')->nullable();
             $table->integer('status')->nullable();
             $table->timestamp('status_updated_at')->nullable();
             $table->timestamp('created_at')->useCurrent()->nullable();

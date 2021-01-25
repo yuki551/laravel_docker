@@ -33,7 +33,6 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
 
             $table->foreign('current_team_id')->references('id')->on('teams');
-            $table->foreign('role_id')->references('id')->on('users');
         });
     }
 

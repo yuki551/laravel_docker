@@ -7,12 +7,17 @@ use Inertia\Inertia;
 use App\Models\Post;
 use Illuminate\Support\Facades\Validator;
 
+
 // user情報取得用
 use Illuminate\Support\Facades\Auth;
 
 
 class HomeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -20,6 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+
         $data = Post::all();
         $user = Auth::user();
         // var_dump($data);
@@ -53,6 +59,18 @@ class HomeController extends Controller
 
         return redirect()->back()
             ->with('message', 'Post Created Successfully.');
+    }
+    public function retryPost(Request $request)
+    {
+        Validator::make($request->all(), [
+            'comment' => ['required'],
+        ])->validate();
+
+        if ($request->has('id')) {
+            Post::find($request->input('id'))->update($request->all());
+            return redirect()->back()
+                ->with('message', 'Post');
+        }
     }
 
     /**

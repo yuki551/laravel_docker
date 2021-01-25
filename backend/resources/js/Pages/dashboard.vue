@@ -5,6 +5,21 @@
                 Dashboard
             </h2>
         </template>
+        <div v-if="notification == 1 && this.$page.user.role_id == 5" class="bg-blue-400 shadow">
+            <div class="max-w-7xl mx-auto py-3 px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    未承認の日報があります。
+                </h2>
+            </div>
+        </div>
+        <div v-if="notification == 3 && this.$page.user.role_id == 10" class="bg-blue-400 shadow">
+            <div class="max-w-7xl mx-auto py-3 px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    差戻しの日報があります。
+                </h2>
+            </div>
+        </div>
+
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
@@ -19,51 +34,96 @@
                             </div>
                         </div>
                     </div>
-
-                    <table class="table-fixed w-full">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="px-4 py-2 w-20">created</th>
-                                <th class="px-4 py-2 w-20">status</th>
-                                <th class="px-4 py-2">summary_am</th>
-                                <th class="px-4 py-2">client_am</th>
-                                <th class="px-4 py-2">contents_am</th>
-                                <th class="px-4 py-2">summary_pm</th>
-                                <th class="px-4 py-2">client_pm</th>
-                                <th class="px-4 py-2">contents_pm</th>
-
-                                <th class="px-4 py-2">Team</th>
-                                <th class="px-4 py-2">userid</th>
-                                <th class="px-4 py-2">Action</th>
-                            </tr>
-                        </thead>
+                    <table v-if="this.$page.user.role_id == 5" class="w-full">
                         <tbody>
-                            <tr v-for="row in userPosts">
-                                <td class="border px-4 py-2">{{ row.created_at }}</td>
-                                <td class="border px-4 py-2">{{ conf[row.status] }}</td>
-                                <td class="border px-4 py-2">{{ row.summary_am }}</td>
-                                <td class="border px-4 py-2">{{ row.client_am }}</td>
-                                <td class="border px-4 py-2">{{ row.contents_am }}</td>
-                                <td class="border px-4 py-2">{{ row.summary_pm }}</td>
-                                <td class="border px-4 py-2">{{ row.client_pm }}</td>
-                                <td class="border px-4 py-2">{{ row.contents_pm }}</td>
-                                <td class="border px-4 py-2">{{ row.team }}</td>
-                                <td class="border px-4 py-2">{{ row.user }}</td>
-                                <button
-                                    @click="edit(row)"
-                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    type="button"
-                                    wire:click.prevent="store()"
-                                    @click="replyRow(row)"
-                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                                >
-                                    差戻し
-                                </button>
-                            </tr>
+                            <div v-for="row in userPosts" class="margin_bottom">
+                                <th colspan="3" class="bg-gray-200 border px-4 py-2 w-6/12">作成日</th>
+                                <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
+                                <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
+                                <tr class="border px-4 py-2">
+                                    <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
+                                    <td colspan="2" class="border px-4 py-2 text-center">
+                                        <button
+                                            @click="edit(row)"
+                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                        >
+                                            差戻し
+                                        </button>
+                                        <button
+                                            wire:click.prevent="update()"
+                                            @click="approve(row)"
+                                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                                        >
+                                            承認
+                                        </button>
+                                    </td>
+                                    <td colspan="1" class="border px-4 py-2">{{ conf[row.status] }}</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午前)</th>
+                                    <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午前)</th>
+                                    <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午後)</th>
+                                    <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午後)</th>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_am }}</td>
+                                    <td colspan="1" class="border px-4 py-2">{{ row.client_am }}</td>
+                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_pm }}</td>
+                                    <td colspan="1" class="border px-4 py-2">{{ row.client_pm }}</td>
+                                </tr>
+                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午前)</th>
+                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午後)</th>
+                                <tr>
+                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
+                                        {{ row.contents_am }}
+                                    </td>
+                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
+                                        {{ row.contents_pm }}
+                                    </td>
+                                </tr>
+                                <th colspan="6" class="bg-gray-200 border px-4 py-2">上司コメント</th>
+                                <tr>
+                                    <td colspan="6" class="border px-4 py-2">{{ row.comment }}</td>
+                                </tr>
+                            </div>
+                        </tbody>
+                    </table>
+                    <table v-else class="w-full">
+                        <tbody>
+                            <div v-for="row in userPosts" class="margin_bottom">
+                                <th colspan="3" class="bg-gray-200 border px-4 py-2 w-6/12">作成日</th>
+                                <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
+                                <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
+                                <tr class="border px-4 py-2">
+                                    <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
+                                    <td colspan="2" class="border px-4 py-2 text-center"></td>
+                                    <td colspan="1" class="border px-4 py-2">{{ conf[row.status] }}</td>
+                                </tr>
+                                <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午前)</th>
+                                <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午前)</th>
+                                <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午後)</th>
+                                <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午後)</th>
+                                <tr>
+                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_am }}</td>
+                                    <td colspan="1" class="border px-4 py-2">{{ row.client_am }}</td>
+                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_pm }}</td>
+                                    <td colspan="1" class="border px-4 py-2">{{ row.client_pm }}</td>
+                                </tr>
+                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午前)</th>
+                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午後)</th>
+                                <tr>
+                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
+                                        {{ row.contents_am }}
+                                    </td>
+                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
+                                        {{ row.contents_pm }}
+                                    </td>
+                                </tr>
+                                <th colspan="6" class="bg-gray-200 border px-4 py-2">上司コメント</th>
+                                <tr>
+                                    <td colspan="6" class="border px-4 py-2">{{ row.comment }}</td>
+                                </tr>
+                            </div>
                         </tbody>
                     </table>
                     <div class="fixed z-10 inset-0 overflow-y-auto ease-out duration-400" v-if="isOpen">
@@ -84,33 +144,17 @@
                                         <div class="">
                                             <div class="mb-4">
                                                 <label
-                                                    for="exampleFormControlInput1"
-                                                    class="block text-gray-700 text-sm font-bold mb-2"
-                                                    >Title:</label
-                                                >
-                                                <input
-                                                    type="text"
-                                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                    id="exampleFormControlInput1"
-                                                    placeholder="Enter Title"
-                                                    v-model="form.title"
-                                                />
-                                                <div v-if="$page.errors.title" class="text-red-500">
-                                                    {{ $page.errors.title[0] }}
-                                                </div>
-                                            </div>
-                                            <div class="mb-4">
-                                                <label
                                                     for="exampleFormControlInput2"
                                                     class="block text-gray-700 text-sm font-bold mb-2"
-                                                    >Body:</label
+                                                    >差し戻しコメント:</label
                                                 >
                                                 <textarea
                                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                                     id="exampleFormControlInput2"
-                                                    v-model="form.body"
-                                                    placeholder="Enter Body"
+                                                    v-model="form.comment"
+                                                    placeholder="Enter comment"
                                                 ></textarea>
+
                                                 <div v-if="$page.errors.body" class="text-red-500">
                                                     {{ $page.errors.body[0] }}
                                                 </div>
@@ -120,24 +164,12 @@
                                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                         <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
                                             <button
-                                                wire:click.prevent="store()"
+                                                wire:click.prevent="retryPost()"
                                                 type="button"
-                                                class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-                                                v-show="!editMode"
-                                                @click="save(form)"
+                                                @click="replyRow(form)"
+                                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                                             >
-                                                Save
-                                            </button>
-                                        </span>
-                                        <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                                            <button
-                                                wire:click.prevent="store()"
-                                                type="button"
-                                                class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-                                                v-show="editMode"
-                                                @click="update(form)"
-                                            >
-                                                Update
+                                                差戻し
                                             </button>
                                         </span>
                                         <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
@@ -171,8 +203,10 @@ export default {
             editMode: false,
             isOpen: false,
             userPost: [],
+            status: 0,
             form: {
                 status: 0,
+                comment: '',
             },
         };
     },
@@ -180,7 +214,8 @@ export default {
         // ログインしているユーザーの投稿のみデータを格納。
         userPosts: function() {
             //user idが同じ時
-            if (this.$page.user.role_id == 1) {
+            if (this.$page.user.role_id == 10) {
+                this.userPost = [];
                 for (let i = 0; i < this.data.length; i++) {
                     if (this.data[i].user == this.$page.user.id) {
                         this.userPost.push(this.data[i]);
@@ -188,33 +223,43 @@ export default {
                 }
             } else if (this.$page.user.role_id == 5) {
                 //部長role
+                this.userPost = [];
                 for (let i = 0; i < this.data.length; i++) {
                     if (this.data[i].team == this.$page.user.current_team_id) {
                         this.userPost.push(this.data[i]);
                     }
                 }
-            } else if (this.$page.user.role_id == 10) {
+            } else if (this.$page.user.role_id == 3) {
                 //社長role
                 return this.data;
             }
-
             return this.userPost;
+        },
+        notification: function() {
+            for (let i = 0; i < this.userPosts.length; i++) {
+                // 差戻し時かつユーザーが一般ユーザーの時
+                if (3 == this.userPost[i]['status'] && this.$page.user.role_id == 10) {
+                    return 3;
+                }
+                // 未承認かつ部長ユーザーの時
+                if (1 == this.userPost[i]['status'] && this.$page.user.role_id == 5) {
+                    return 1;
+                }
+            }
         },
     },
     methods: {
-        // openModal: function() {
-        //     this.isOpen = true;
-        // },
-        // closeModal: function() {
-        //     this.isOpen = false;
-        //     this.reset();
-        //     this.editMode = false;
-        // },
+        openModal: function() {
+            this.isOpen = true;
+        },
+        closeModal: function() {
+            this.isOpen = false;
+            this.reset();
+            this.editMode = false;
+        },
+
         reset: function() {
-            this.form = {
-                title: null,
-                body: null,
-            };
+            (this.form = {}), (this.params = {});
         },
         save: function(data) {
             this.$inertia.post('/dashboard', data);
@@ -237,16 +282,24 @@ export default {
             data._method = 'PUT';
             data['status'] = 3;
             this.$inertia.post('/dashboard/' + data.id, data);
-            console.log(data);
+            this.reset();
+            this.closeModal();
         },
-        // deleteRow: function(data) {
-        //     if (!confirm('Are you sure want to remove?')) return;
-        //     data._method = 'DELETE';
-        //     this.$inertia.post('/dashboard/' + data.id, data);
-        //     this.reset();
-        //     this.closeModal();
-        // },
+        approve: function(data) {
+            data._method = 'PUT';
+            data['status'] = 2;
+            this.$inertia.post('/dashboard/' + data.id, data);
+            this.reset();
+        },
     },
 };
 </script>
-<style></style>
+<style>
+.margin_bottom {
+    margin-bottom: 10px;
+}
+
+.whiteSpace {
+    word-break: break-all;
+}
+</style>
