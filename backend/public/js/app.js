@@ -22717,6 +22717,195 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../Layouts/AppLayout */ "./resources/js/Layouts/AppLayout.vue");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -22925,7 +23114,8 @@ __webpack_require__.r(__webpack_exports__);
       form: {
         status: 0,
         comment: ''
-      }
+      },
+      index: 0
     };
   },
   computed: {
@@ -22999,6 +23189,7 @@ __webpack_require__.r(__webpack_exports__);
       this.reset();
       this.closeModal();
     },
+    // 差戻し
     replyRow: function replyRow(data) {
       data._method = 'PUT';
       data['status'] = 3;
@@ -23006,14 +23197,143 @@ __webpack_require__.r(__webpack_exports__);
       this.reset();
       this.closeModal();
     },
+    // 承認
     approve: function approve(data) {
       data._method = 'PUT';
       data['status'] = 2;
       this.$inertia.post('/dashboard/' + data.id, data);
       this.reset();
+    },
+    // 提出
+    submission: function submission(data) {
+      data._method = 'PUT';
+      data['status'] = 1;
+      this.$inertia.post('/dashboard/' + data.id, data);
+      this.reset();
+    },
+    // 権限判定
+    judgeRole: function judgeRole(index) {
+      if ( // roleが一般か判定
+      this.$page.user.role_id == 10 && this.userPost[index].status == 3 && this.$page.user.id == this.userPost[index].user) {
+        return true;
+      } else if ( // roleが部長か判定
+      this.$page.user.role_id == 5 && this.userPost[index].status == 3 && this.$page.user.id == this.userPost[index].user) {
+        return true;
+      }
     }
   }
 });
+
+var Details = /*#__PURE__*/function () {
+  function Details(el, settings) {
+    var _this = this;
+
+    _classCallCheck(this, Details);
+
+    this.group = el;
+    this.details = this.group.getElementsByClassName('details');
+    this.toggles = this.group.getElementsByClassName('details__summary');
+    this.contents = this.group.getElementsByClassName('details__content'); // Set default settings if necessary
+
+    this.settings = Object.assign({
+      speed: 300,
+      one_visible: false
+    }, settings); // Setup inital positions
+
+    for (var i = 0; i < this.details.length; i++) {
+      var detail = this.details[i];
+      var toggle = this.toggles[i];
+      var content = this.contents[i]; // Set transition-duration to match JS setting
+
+      detail.style.transitionDuration = this.settings.speed + 'ms'; // Set initial height to transition from
+
+      if (!detail.hasAttribute('open')) {
+        detail.style.height = toggle.clientHeight + 'px';
+      } else {
+        detail.style.height = toggle.clientHeight + content.clientHeight + 'px';
+      }
+    } // Setup click handler
+
+
+    this.group.addEventListener('click', function (e) {
+      if (e.target.classList.contains('details__summary')) {
+        e.preventDefault();
+        var num = 0;
+
+        for (var _i2 = 0; _i2 < _this.toggles.length; _i2++) {
+          if (_this.toggles[_i2] === e.target) {
+            num = _i2;
+            break;
+          }
+        }
+
+        if (!e.target.parentNode.hasAttribute('open')) {
+          _this.open(num);
+        } else {
+          _this.close(num);
+        }
+      }
+    });
+  }
+
+  _createClass(Details, [{
+    key: "open",
+    value: function open(i) {
+      var detail = this.details[i];
+      var toggle = this.toggles[i];
+      var content = this.contents[i]; // If applicable, hide all the other details first
+
+      if (this.settings.one_visible) {
+        for (var a = 0; a < this.toggles.length; a++) {
+          if (i !== a) this.close(a);
+        }
+      } // Update class
+
+
+      detail.classList.remove('is-closing'); // Get height of toggle
+
+      var toggle_height = toggle.clientHeight; // Momentarily show the contents just to get the height
+
+      detail.setAttribute('open', true);
+      var content_height = content.clientHeight;
+      detail.removeAttribute('open'); // Set the correct height and let CSS transition it
+
+      detail.style.height = toggle_height + content_height + 'px'; // Finally set the open attr
+
+      detail.setAttribute('open', true);
+    }
+  }, {
+    key: "close",
+    value: function close(i) {
+      var detail = this.details[i];
+      var toggle = this.toggles[i]; // Update class
+
+      detail.classList.add('is-closing'); // Get height of toggle
+
+      var toggle_height = toggle.clientHeight; // Set the height so only the toggle is visible
+
+      detail.style.height = toggle_height + 'px';
+      setTimeout(function () {
+        // Check if still closing
+        if (detail.classList.contains('is-closing')) detail.removeAttribute('open');
+        detail.classList.remove('is-closing');
+      }, this.settings.speed);
+    }
+  }]);
+
+  return Details;
+}();
+
+(function () {
+  var els = document.getElementsByClassName('details-group');
+
+  for (var i = 0; i < els.length; i++) {
+    var details = new Details(els[i], {
+      speed: 500,
+      one_visible: true
+    });
+  }
+})();
 
 /***/ }),
 
@@ -23359,7 +23679,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".margin_bottom {\n  margin-bottom: 10px;\n}\n.whiteSpace {\n  word-break: break-all;\n}\n", ""]);
+exports.push([module.i, ".margin_bottom {\n  margin-bottom: 10px;\n}\n.whiteSpace {\n  word-break: break-all;\n}\nhtml,\nbody {\n  min-height: 100%;\n}\nhtml {\n  overflow-y: scroll;\n  font-size: 18px;\n}\nbody {\n  font-size: 1rem;\n  font-weight: 300;\n  font-family: Roboto, sans-serif;\n  line-height: 1.4;\n  color: #546e7a;\n  background-color: #eceff1;\n}\np,\nul,\nli {\n  margin: 0;\n  padding: 0;\n  margin-bottom: 24px;\n}\np:last-child,\nul:last-child,\nli:last-child {\n  margin-bottom: 0;\n}\na {\n  color: #00acc1;\n}\ncode {\n  background: #eceff1;\n}\n.wrapper {\n  margin-left: auto;\n  margin-right: auto;\n  padding: 10px;\n}\n.details-group {\n  border: 1px solid #cfd8dc;\n  border-radius: 5px;\n  background-color: white;\n}\n.details {\n  overflow: hidden;\n  border-bottom: 1px solid #cfd8dc;\n  transition: height 300ms ease-in-out;\n}\n.details:last-child {\n  border-bottom: 0;\n}\n.details__summary,\n.details__content {\n  padding: 24px;\n}\n.details__summary {\n  position: relative;\n  list-style: none;\n  padding-left: 48px;\n  outline: 0;\n  cursor: pointer;\n  font-size: 1.4rem;\n  font-family: Oswald;\n  text-transform: uppercase;\n  transition: color 300ms ease-in-out;\n}\n[open] > .details__summary {\n  color: #00acc1;\n}\n.details__summary::-webkit-details-marker {\n  display: none;\n}\n.details__summary:before,\n.details__summary:after {\n  content: '';\n  position: absolute;\n}\n.details__summary:before {\n  left: 20px;\n  top: 50%;\n  height: 2px;\n  margin-top: -1px;\n  width: 16px;\n  background: #00acc1;\n}\n.details__summary:after {\n  left: 28px;\n  top: 50%;\n  height: 16px;\n  margin-top: -8px;\n  width: 2px;\n  margin-left: -1px;\n  background: #00acc1;\n  transition: all 300ms ease-in-out;\n}\n[open] .details__summary:after {\n  opacity: 0;\n  transform: translateY(25%);\n}\n.details__content {\n  padding-top: 0;\n  padding-left: 48px;\n}\n", ""]);
 
 // exports
 
@@ -71388,464 +71708,536 @@ var render = function() {
                   )
                 : _vm._e(),
               _vm._v(" "),
-              this.$page.user.role_id == 5
-                ? _c("table", { staticClass: "w-full" }, [
-                    _c(
-                      "tbody",
-                      _vm._l(_vm.userPosts, function(row) {
-                        return _c("div", { staticClass: "margin_bottom" }, [
-                          _c(
-                            "th",
-                            {
-                              staticClass:
-                                "bg-gray-200 border px-4 py-2 w-6/12",
-                              attrs: { colspan: "3" }
-                            },
-                            [_vm._v("作成日")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass:
-                                "bg-gray-200 border px-4 py-2 w-5/12",
-                              attrs: { colspan: "2" }
-                            },
-                            [_vm._v("Action")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "bg-gray-200 border px-4 py-2",
-                              attrs: { colspan: "1" }
-                            },
-                            [_vm._v("状態")]
-                          ),
-                          _vm._v(" "),
-                          _c("tr", { staticClass: "border px-4 py-2" }, [
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "3" }
-                              },
-                              [_vm._v(_vm._s(row.created_at))]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2 text-center",
-                                attrs: { colspan: "2" }
-                              },
-                              [
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass:
-                                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded",
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.edit(row)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                        差戻し\n                                    "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass:
-                                      "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded",
-                                    attrs: { "wire:click.prevent": "update()" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.approve(row)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                        承認\n                                    "
-                                    )
-                                  ]
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "1" }
-                              },
-                              [_vm._v(_vm._s(_vm.conf[row.status]))]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("tr", [
-                            _c(
-                              "th",
-                              {
-                                staticClass: "bg-gray-200 border px-4 py-2",
-                                attrs: { colspan: "2" }
-                              },
-                              [_vm._v("概要(午前)")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "th",
-                              {
-                                staticClass: "bg-gray-200 border px-4 py-2",
-                                attrs: { colspan: "1" }
-                              },
-                              [_vm._v("営業先(午前)")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "th",
-                              {
-                                staticClass: "bg-gray-200 border px-4 py-2",
-                                attrs: { colspan: "2" }
-                              },
-                              [_vm._v("概要(午後)")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "th",
-                              {
-                                staticClass: "bg-gray-200 border px-4 py-2",
-                                attrs: { colspan: "1" }
-                              },
-                              [_vm._v("営業先(午後)")]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("tr", [
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "2" }
-                              },
-                              [_vm._v(_vm._s(row.summary_am))]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "1" }
-                              },
-                              [_vm._v(_vm._s(row.client_am))]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "2" }
-                              },
-                              [_vm._v(_vm._s(row.summary_pm))]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "1" }
-                              },
-                              [_vm._v(_vm._s(row.client_pm))]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "bg-gray-200 border px-4 py-2",
-                              attrs: { colspan: "3" }
-                            },
-                            [_vm._v("内容(午前)")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "bg-gray-200 border px-4 py-2",
-                              attrs: { colspan: "3" }
-                            },
-                            [_vm._v("内容(午後)")]
-                          ),
-                          _vm._v(" "),
-                          _c("tr", [
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2 whiteSpace",
-                                attrs: { colspan: "3" }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                    " +
-                                    _vm._s(row.contents_am) +
-                                    "\n                                "
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2 whiteSpace",
-                                attrs: { colspan: "3" }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                    " +
-                                    _vm._s(row.contents_pm) +
-                                    "\n                                "
-                                )
-                              ]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "bg-gray-200 border px-4 py-2",
-                              attrs: { colspan: "6" }
-                            },
-                            [_vm._v("上司コメント")]
-                          ),
-                          _vm._v(" "),
-                          _c("tr", [
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "6" }
-                              },
-                              [_vm._v(_vm._s(row.comment))]
-                            )
-                          ])
+              _c("div", { staticClass: "wrapper" }, [
+                _c(
+                  "section",
+                  { staticClass: "details-group w-full" },
+                  _vm._l(_vm.userPosts, function(row, index) {
+                    return _c(
+                      "details",
+                      { staticClass: "details", attrs: { close: "" } },
+                      [
+                        _c("summary", { staticClass: "details__summary" }, [
+                          _vm._v(
+                            "\n                                <details> and <summary>\n                            "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "details__content" }, [
+                          this.$page.user.role_id == 5
+                            ? _c("table", { staticClass: "w-full" }, [
+                                _c("tbody", [
+                                  _c("div", { staticClass: "margin_bottom" }, [
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2 w-6/12",
+                                        attrs: { colspan: "3" }
+                                      },
+                                      [_vm._v("作成日")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2 w-5/12",
+                                        attrs: { colspan: "2" }
+                                      },
+                                      [_vm._v("Action")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2",
+                                        attrs: { colspan: "1" }
+                                      },
+                                      [_vm._v("状態")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "tr",
+                                      { staticClass: "border px-4 py-2" },
+                                      [
+                                        _c(
+                                          "td",
+                                          {
+                                            staticClass: "border px-4 py-2",
+                                            attrs: { colspan: "3" }
+                                          },
+                                          [_vm._v(_vm._s(row.created_at))]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "td",
+                                          {
+                                            staticClass:
+                                              "border px-4 py-2 text-center",
+                                            attrs: { colspan: "2" }
+                                          },
+                                          [
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded",
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.edit(row)
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                                        差戻し\n                                                    "
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded",
+                                                attrs: {
+                                                  "wire:click.prevent":
+                                                    "update()"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.approve(row)
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                                        承認\n                                                    "
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "td",
+                                          {
+                                            staticClass: "border px-4 py-2",
+                                            attrs: { colspan: "1" }
+                                          },
+                                          [_vm._v(_vm._s(_vm.conf[row.status]))]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c(
+                                        "th",
+                                        {
+                                          staticClass:
+                                            "bg-gray-200 border px-4 py-2",
+                                          attrs: { colspan: "2" }
+                                        },
+                                        [_vm._v("概要(午前)")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "th",
+                                        {
+                                          staticClass:
+                                            "bg-gray-200 border px-4 py-2",
+                                          attrs: { colspan: "1" }
+                                        },
+                                        [_vm._v("営業先(午前)")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "th",
+                                        {
+                                          staticClass:
+                                            "bg-gray-200 border px-4 py-2",
+                                          attrs: { colspan: "2" }
+                                        },
+                                        [_vm._v("概要(午後)")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "th",
+                                        {
+                                          staticClass:
+                                            "bg-gray-200 border px-4 py-2",
+                                          attrs: { colspan: "1" }
+                                        },
+                                        [_vm._v("営業先(午後)")]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "border px-4 py-2",
+                                          attrs: { colspan: "2" }
+                                        },
+                                        [_vm._v(_vm._s(row.summary_am))]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "border px-4 py-2",
+                                          attrs: { colspan: "1" }
+                                        },
+                                        [_vm._v(_vm._s(row.client_am))]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "border px-4 py-2",
+                                          attrs: { colspan: "2" }
+                                        },
+                                        [_vm._v(_vm._s(row.summary_pm))]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "border px-4 py-2",
+                                          attrs: { colspan: "1" }
+                                        },
+                                        [_vm._v(_vm._s(row.client_pm))]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2",
+                                        attrs: { colspan: "3" }
+                                      },
+                                      [_vm._v("内容(午前)")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2",
+                                        attrs: { colspan: "3" }
+                                      },
+                                      [_vm._v("内容(午後)")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass:
+                                            "border px-4 py-2 whiteSpace",
+                                          attrs: { colspan: "3" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    " +
+                                              _vm._s(row.contents_am) +
+                                              "\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass:
+                                            "border px-4 py-2 whiteSpace",
+                                          attrs: { colspan: "3" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    " +
+                                              _vm._s(row.contents_pm) +
+                                              "\n                                                "
+                                          )
+                                        ]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2",
+                                        attrs: { colspan: "6" }
+                                      },
+                                      [_vm._v("上司コメント")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "border px-4 py-2",
+                                          attrs: { colspan: "6" }
+                                        },
+                                        [_vm._v(_vm._s(row.comment))]
+                                      )
+                                    ])
+                                  ])
+                                ])
+                              ])
+                            : _c("table", { staticClass: "w-full" }, [
+                                _c("tbody", [
+                                  _c("div", { staticClass: "margin_bottom" }, [
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2 w-6/12",
+                                        attrs: { colspan: "3" }
+                                      },
+                                      [_vm._v("作成日")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2 w-5/12",
+                                        attrs: { colspan: "2" }
+                                      },
+                                      [_vm._v("Action")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2",
+                                        attrs: { colspan: "1" }
+                                      },
+                                      [_vm._v("状態")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "tr",
+                                      { staticClass: "border px-4 py-2" },
+                                      [
+                                        _c(
+                                          "td",
+                                          {
+                                            staticClass: "border px-4 py-2",
+                                            attrs: { colspan: "3" }
+                                          },
+                                          [_vm._v(_vm._s(row.created_at))]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "td",
+                                          {
+                                            staticClass:
+                                              "border px-4 py-2 text-center",
+                                            attrs: { colspan: "2" }
+                                          },
+                                          [
+                                            _vm.judgeRole(index)
+                                              ? _c(
+                                                  "button",
+                                                  {
+                                                    staticClass:
+                                                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded",
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.edit(row)
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                                        再提出\n                                                    "
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "td",
+                                          {
+                                            staticClass: "border px-4 py-2",
+                                            attrs: { colspan: "1" }
+                                          },
+                                          [_vm._v(_vm._s(_vm.conf[row.status]))]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2",
+                                        attrs: { colspan: "2" }
+                                      },
+                                      [_vm._v("概要(午前)")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2",
+                                        attrs: { colspan: "1" }
+                                      },
+                                      [_vm._v("営業先(午前)")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2",
+                                        attrs: { colspan: "2" }
+                                      },
+                                      [_vm._v("概要(午後)")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2",
+                                        attrs: { colspan: "1" }
+                                      },
+                                      [_vm._v("営業先(午後)")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "border px-4 py-2",
+                                          attrs: { colspan: "2" }
+                                        },
+                                        [_vm._v(_vm._s(row.summary_am))]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "border px-4 py-2",
+                                          attrs: { colspan: "1" }
+                                        },
+                                        [_vm._v(_vm._s(row.client_am))]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "border px-4 py-2",
+                                          attrs: { colspan: "2" }
+                                        },
+                                        [_vm._v(_vm._s(row.summary_pm))]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "border px-4 py-2",
+                                          attrs: { colspan: "1" }
+                                        },
+                                        [_vm._v(_vm._s(row.client_pm))]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2",
+                                        attrs: { colspan: "3" }
+                                      },
+                                      [_vm._v("内容(午前)")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2",
+                                        attrs: { colspan: "3" }
+                                      },
+                                      [_vm._v("内容(午後)")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass:
+                                            "border px-4 py-2 whiteSpace",
+                                          attrs: { colspan: "3" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    " +
+                                              _vm._s(row.contents_am) +
+                                              "\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass:
+                                            "border px-4 py-2 whiteSpace",
+                                          attrs: { colspan: "3" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    " +
+                                              _vm._s(row.contents_pm) +
+                                              "\n                                                "
+                                          )
+                                        ]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "th",
+                                      {
+                                        staticClass:
+                                          "bg-gray-200 border px-4 py-2",
+                                        attrs: { colspan: "6" }
+                                      },
+                                      [_vm._v("上司コメント")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "border px-4 py-2",
+                                          attrs: { colspan: "6" }
+                                        },
+                                        [_vm._v(_vm._s(row.comment))]
+                                      )
+                                    ])
+                                  ])
+                                ])
+                              ])
                         ])
-                      }),
-                      0
+                      ]
                     )
-                  ])
-                : _c("table", { staticClass: "w-full" }, [
-                    _c(
-                      "tbody",
-                      _vm._l(_vm.userPosts, function(row) {
-                        return _c("div", { staticClass: "margin_bottom" }, [
-                          _c(
-                            "th",
-                            {
-                              staticClass:
-                                "bg-gray-200 border px-4 py-2 w-6/12",
-                              attrs: { colspan: "3" }
-                            },
-                            [_vm._v("作成日")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass:
-                                "bg-gray-200 border px-4 py-2 w-5/12",
-                              attrs: { colspan: "2" }
-                            },
-                            [_vm._v("Action")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "bg-gray-200 border px-4 py-2",
-                              attrs: { colspan: "1" }
-                            },
-                            [_vm._v("状態")]
-                          ),
-                          _vm._v(" "),
-                          _c("tr", { staticClass: "border px-4 py-2" }, [
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "3" }
-                              },
-                              [_vm._v(_vm._s(row.created_at))]
-                            ),
-                            _vm._v(" "),
-                            _c("td", {
-                              staticClass: "border px-4 py-2 text-center",
-                              attrs: { colspan: "2" }
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "1" }
-                              },
-                              [_vm._v(_vm._s(_vm.conf[row.status]))]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "bg-gray-200 border px-4 py-2",
-                              attrs: { colspan: "2" }
-                            },
-                            [_vm._v("概要(午前)")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "bg-gray-200 border px-4 py-2",
-                              attrs: { colspan: "1" }
-                            },
-                            [_vm._v("営業先(午前)")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "bg-gray-200 border px-4 py-2",
-                              attrs: { colspan: "2" }
-                            },
-                            [_vm._v("概要(午後)")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "bg-gray-200 border px-4 py-2",
-                              attrs: { colspan: "1" }
-                            },
-                            [_vm._v("営業先(午後)")]
-                          ),
-                          _vm._v(" "),
-                          _c("tr", [
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "2" }
-                              },
-                              [_vm._v(_vm._s(row.summary_am))]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "1" }
-                              },
-                              [_vm._v(_vm._s(row.client_am))]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "2" }
-                              },
-                              [_vm._v(_vm._s(row.summary_pm))]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "1" }
-                              },
-                              [_vm._v(_vm._s(row.client_pm))]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "bg-gray-200 border px-4 py-2",
-                              attrs: { colspan: "3" }
-                            },
-                            [_vm._v("内容(午前)")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "bg-gray-200 border px-4 py-2",
-                              attrs: { colspan: "3" }
-                            },
-                            [_vm._v("内容(午後)")]
-                          ),
-                          _vm._v(" "),
-                          _c("tr", [
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2 whiteSpace",
-                                attrs: { colspan: "3" }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                    " +
-                                    _vm._s(row.contents_am) +
-                                    "\n                                "
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2 whiteSpace",
-                                attrs: { colspan: "3" }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                    " +
-                                    _vm._s(row.contents_pm) +
-                                    "\n                                "
-                                )
-                              ]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "bg-gray-200 border px-4 py-2",
-                              attrs: { colspan: "6" }
-                            },
-                            [_vm._v("上司コメント")]
-                          ),
-                          _vm._v(" "),
-                          _c("tr", [
-                            _c(
-                              "td",
-                              {
-                                staticClass: "border px-4 py-2",
-                                attrs: { colspan: "6" }
-                              },
-                              [_vm._v(_vm._s(row.comment))]
-                            )
-                          ])
-                        ])
-                      }),
-                      0
-                    )
-                  ]),
+                  }),
+                  0
+                )
+              ]),
               _vm._v(" "),
               _vm.isOpen
                 ? _c(
@@ -71890,147 +72282,770 @@ var render = function() {
                               }
                             },
                             [
-                              _c("form", [
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass:
-                                      "bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4"
-                                  },
-                                  [
-                                    _c("div", {}, [
-                                      _c("div", { staticClass: "mb-4" }, [
-                                        _c(
-                                          "label",
-                                          {
-                                            staticClass:
-                                              "block text-gray-700 text-sm font-bold mb-2",
-                                            attrs: {
-                                              for: "exampleFormControlInput2"
-                                            }
-                                          },
-                                          [_vm._v("差し戻しコメント:")]
-                                        ),
-                                        _vm._v(" "),
-                                        _c("textarea", {
-                                          directives: [
-                                            {
-                                              name: "model",
-                                              rawName: "v-model",
-                                              value: _vm.form.comment,
-                                              expression: "form.comment"
-                                            }
-                                          ],
-                                          staticClass:
-                                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
-                                          attrs: {
-                                            id: "exampleFormControlInput2",
-                                            placeholder: "Enter comment"
-                                          },
-                                          domProps: { value: _vm.form.comment },
-                                          on: {
-                                            input: function($event) {
-                                              if ($event.target.composing) {
-                                                return
-                                              }
-                                              _vm.$set(
-                                                _vm.form,
-                                                "comment",
-                                                $event.target.value
-                                              )
-                                            }
-                                          }
-                                        }),
-                                        _vm._v(" "),
-                                        _vm.$page.errors.body
-                                          ? _c(
-                                              "div",
-                                              { staticClass: "text-red-500" },
+                              _vm.notification == 3
+                                ? _c("form", [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4"
+                                      },
+                                      [
+                                        _c("div", {}, [
+                                          _c("div", { staticClass: "mb-4" }, [
+                                            _c(
+                                              "label",
+                                              {
+                                                staticClass:
+                                                  "block text-gray-700 text-sm font-bold mb-2",
+                                                attrs: {
+                                                  for:
+                                                    "exampleFormControlInput1"
+                                                }
+                                              },
                                               [
                                                 _vm._v(
-                                                  "\n                                                " +
-                                                    _vm._s(
-                                                      _vm.$page.errors.body[0]
-                                                    ) +
+                                                  "名前:" +
+                                                    _vm._s(_vm.form.username) +
                                                     "\n                                            "
                                                 )
                                               ]
-                                            )
-                                          : _vm._e()
-                                      ])
-                                    ])
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass:
-                                      "bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
-                                  },
-                                  [
-                                    _c(
-                                      "span",
-                                      {
-                                        staticClass:
-                                          "flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto"
-                                      },
-                                      [
-                                        _c(
-                                          "button",
-                                          {
-                                            staticClass:
-                                              "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded",
-                                            attrs: {
-                                              "wire:click.prevent":
-                                                "retryPost()",
-                                              type: "button"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.replyRow(_vm.form)
+                                            ),
+                                            _vm._v(" "),
+                                            _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value: _vm.form.user,
+                                                  expression: "form.user"
+                                                }
+                                              ],
+                                              staticClass:
+                                                "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                                              attrs: {
+                                                type: "hidden",
+                                                id: "exampleFormControlInput1",
+                                                placeholder: "Enter Title"
+                                              },
+                                              domProps: {
+                                                value: _vm.form.user
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    _vm.form,
+                                                    "user",
+                                                    $event.target.value
+                                                  )
+                                                }
                                               }
-                                            }
-                                          },
-                                          [
-                                            _vm._v(
-                                              "\n                                            差戻し\n                                        "
-                                            )
-                                          ]
-                                        )
+                                            }),
+                                            _vm._v(" "),
+                                            _vm.$page.errors.title
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "text-red-500"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                                " +
+                                                        _vm._s(
+                                                          _vm.$page.errors
+                                                            .title[0]
+                                                        ) +
+                                                        "\n                                            "
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", { staticClass: "mb-4" }, [
+                                            _c(
+                                              "label",
+                                              {
+                                                staticClass:
+                                                  "block text-gray-700 text-sm font-bold mb-2",
+                                                attrs: {
+                                                  for:
+                                                    "exampleFormControlInput1"
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "報告日時:" +
+                                                    _vm._s(_vm.form.date)
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value: _vm.form.date,
+                                                  expression: "form.date"
+                                                }
+                                              ],
+                                              staticClass:
+                                                "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                                              attrs: {
+                                                type: "hidden",
+                                                id: "exampleFormControlInput1",
+                                                placeholder: "Enter Title"
+                                              },
+                                              domProps: {
+                                                value: _vm.form.date
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    _vm.form,
+                                                    "date",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _vm.$page.errors.title
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "text-red-500"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                                " +
+                                                        _vm._s(
+                                                          _vm.$page.errors
+                                                            .title[0]
+                                                        ) +
+                                                        "\n                                            "
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", { staticClass: "mb-4" }, [
+                                            _c(
+                                              "label",
+                                              {
+                                                staticClass:
+                                                  "block text-gray-700 text-sm font-bold mb-2",
+                                                attrs: {
+                                                  for:
+                                                    "exampleFormControlInput1"
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "所属部署:" +
+                                                    _vm._s(_vm.form.teamname)
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value: _vm.form.team,
+                                                  expression: "form.team"
+                                                }
+                                              ],
+                                              staticClass:
+                                                "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                                              attrs: {
+                                                type: "hidden",
+                                                id: "exampleFormControlInput1",
+                                                placeholder: "Enter Title"
+                                              },
+                                              domProps: {
+                                                value: _vm.form.team
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    _vm.form,
+                                                    "team",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _vm.$page.errors.title
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "text-red-500"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                                " +
+                                                        _vm._s(
+                                                          _vm.$page.errors
+                                                            .title[0]
+                                                        ) +
+                                                        "\n                                            "
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", { staticClass: "mb-4" }, [
+                                            _c(
+                                              "label",
+                                              {
+                                                staticClass:
+                                                  "block text-gray-700 text-sm font-bold mb-2",
+                                                attrs: {
+                                                  for:
+                                                    "exampleFormControlInput1"
+                                                }
+                                              },
+                                              [_vm._v("業務報告(午前):")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("textarea", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value: _vm.form.summary_am,
+                                                  expression: "form.summary_am"
+                                                }
+                                              ],
+                                              staticClass:
+                                                "shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                                              attrs: {
+                                                id: "exampleFormControlInput2",
+                                                placeholder: "業務"
+                                              },
+                                              domProps: {
+                                                value: _vm.form.summary_am
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    _vm.form,
+                                                    "summary_am",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _vm.$page.errors.title
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "text-red-500"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                                " +
+                                                        _vm._s(
+                                                          _vm.$page.errors
+                                                            .title[0]
+                                                        ) +
+                                                        "\n                                            "
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", { staticClass: "mb-4" }, [
+                                            _c("textarea", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value: _vm.form.contents_am,
+                                                  expression: "form.contents_am"
+                                                }
+                                              ],
+                                              staticClass:
+                                                "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                                              attrs: {
+                                                id: "exampleFormControlInput2",
+                                                placeholder: "内容"
+                                              },
+                                              domProps: {
+                                                value: _vm.form.contents_am
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    _vm.form,
+                                                    "contents_am",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _vm.$page.errors.body
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "text-red-500"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                                " +
+                                                        _vm._s(
+                                                          _vm.$page.errors
+                                                            .body[0]
+                                                        ) +
+                                                        "\n                                            "
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", { staticClass: "mb-4" }, [
+                                            _c(
+                                              "label",
+                                              {
+                                                staticClass:
+                                                  "block text-gray-700 text-sm font-bold mb-2",
+                                                attrs: {
+                                                  for:
+                                                    "exampleFormControlInput1"
+                                                }
+                                              },
+                                              [_vm._v("業務報告(午後):")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("textarea", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value: _vm.form.summary_pm,
+                                                  expression: "form.summary_pm"
+                                                }
+                                              ],
+                                              staticClass:
+                                                "shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                                              attrs: {
+                                                id: "exampleFormControlInput2",
+                                                placeholder: "業務"
+                                              },
+                                              domProps: {
+                                                value: _vm.form.summary_pm
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    _vm.form,
+                                                    "summary_pm",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _vm.$page.errors.title
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "text-red-500"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                                " +
+                                                        _vm._s(
+                                                          _vm.$page.errors
+                                                            .title[0]
+                                                        ) +
+                                                        "\n                                            "
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", { staticClass: "mb-4" }, [
+                                            _c("textarea", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value: _vm.form.contents_pm,
+                                                  expression: "form.contents_pm"
+                                                }
+                                              ],
+                                              staticClass:
+                                                "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                                              attrs: {
+                                                id: "exampleFormControlInput2",
+                                                placeholder: "内容"
+                                              },
+                                              domProps: {
+                                                value: _vm.form.contents_pm
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    _vm.form,
+                                                    "contents_pm",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _vm.$page.errors.body
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "text-red-500"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                                " +
+                                                        _vm._s(
+                                                          _vm.$page.errors
+                                                            .body[0]
+                                                        ) +
+                                                        "\n                                            "
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ])
+                                        ])
                                       ]
                                     ),
                                     _vm._v(" "),
                                     _c(
-                                      "span",
+                                      "div",
                                       {
                                         staticClass:
-                                          "mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto"
+                                          "bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
                                       },
                                       [
                                         _c(
-                                          "button",
+                                          "span",
                                           {
                                             staticClass:
-                                              "inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5",
-                                            attrs: { type: "button" },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.closeModal()
-                                              }
-                                            }
+                                              "flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto"
                                           },
                                           [
-                                            _vm._v(
-                                              "\n                                            Cancel\n                                        "
+                                            this.$page.user.role_id == 5 ||
+                                            this.$page.user.role_id == 3
+                                              ? _c(
+                                                  "button",
+                                                  {
+                                                    staticClass:
+                                                      "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded",
+                                                    attrs: {
+                                                      "wire:click.prevent":
+                                                        "retryPost()",
+                                                      type: "button"
+                                                    },
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.replyRow(
+                                                          _vm.form
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                            差戻し\n                                        "
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "span",
+                                          {
+                                            staticClass:
+                                              "flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto"
+                                          },
+                                          [
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded",
+                                                attrs: {
+                                                  "wire:click.prevent":
+                                                    "retryPost()",
+                                                  type: "button"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.submission(
+                                                      _vm.form
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                            再提出\n                                        "
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "span",
+                                          {
+                                            staticClass:
+                                              "mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto"
+                                          },
+                                          [
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5",
+                                                attrs: { type: "button" },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.closeModal()
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                            Cancel\n                                        "
+                                                )
+                                              ]
                                             )
                                           ]
                                         )
                                       ]
                                     )
-                                  ]
-                                )
-                              ])
+                                  ])
+                                : _vm.notification == 1
+                                ? _c("form", [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4"
+                                      },
+                                      [
+                                        _c("div", {}, [
+                                          _c("div", { staticClass: "mb-4" }, [
+                                            _c(
+                                              "label",
+                                              {
+                                                staticClass:
+                                                  "block text-gray-700 text-sm font-bold mb-2",
+                                                attrs: {
+                                                  for:
+                                                    "exampleFormControlInput2"
+                                                }
+                                              },
+                                              [_vm._v("差し戻しコメント:")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("textarea", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value: _vm.form.comment,
+                                                  expression: "form.comment"
+                                                }
+                                              ],
+                                              staticClass:
+                                                "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                                              attrs: {
+                                                id: "exampleFormControlInput2",
+                                                placeholder: "Enter comment"
+                                              },
+                                              domProps: {
+                                                value: _vm.form.comment
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    _vm.form,
+                                                    "comment",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _vm.$page.errors.body
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "text-red-500"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                                " +
+                                                        _vm._s(
+                                                          _vm.$page.errors
+                                                            .body[0]
+                                                        ) +
+                                                        "\n                                            "
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ])
+                                        ])
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          {
+                                            staticClass:
+                                              "flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto"
+                                          },
+                                          [
+                                            this.$page.user.role_id == 5 ||
+                                            this.$page.user.role_id == 3
+                                              ? _c(
+                                                  "button",
+                                                  {
+                                                    staticClass:
+                                                      "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded",
+                                                    attrs: {
+                                                      "wire:click.prevent":
+                                                        "retryPost()",
+                                                      type: "button"
+                                                    },
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.replyRow(
+                                                          _vm.form
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                            差戻し\n                                        "
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "span",
+                                          {
+                                            staticClass:
+                                              "flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto"
+                                          },
+                                          [
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded",
+                                                attrs: {
+                                                  "wire:click.prevent":
+                                                    "retryPost()",
+                                                  type: "button"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.submission(
+                                                      _vm.form
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                            再提出\n                                        "
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "span",
+                                          {
+                                            staticClass:
+                                              "mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto"
+                                          },
+                                          [
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5",
+                                                attrs: { type: "button" },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.closeModal()
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                            Cancel\n                                        "
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  ])
+                                : _vm._e()
                             ]
                           )
                         ]
