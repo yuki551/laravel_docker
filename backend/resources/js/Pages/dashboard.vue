@@ -35,118 +35,106 @@
                         </div>
                     </div>
 
-                    <div class="wrapper">
-                        <section class="details-group w-full">
-                            <details v-for="(row, index) in userPosts" class="details" close>
-                                <summary class="details__summary">
-                                    &lt;details&gt; and &lt;summary&gt;
-                                </summary>
-                                <div class="details__content">
-                                    <table v-if="this.$page.user.role_id == 5" class="w-full">
-                                        <tbody>
-                                            <div class="margin_bottom">
-                                                <th colspan="3" class="bg-gray-200 border px-4 py-2 w-6/12">作成日</th>
-                                                <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
-                                                <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
-                                                <tr class="border px-4 py-2">
-                                                    <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
-                                                    <td colspan="2" class="border px-4 py-2 text-center">
-                                                        <button
-                                                            @click="edit(row)"
-                                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                                        >
-                                                            差戻し
-                                                        </button>
-                                                        <button
-                                                            wire:click.prevent="update()"
-                                                            @click="approve(row)"
-                                                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                                                        >
-                                                            承認
-                                                        </button>
-                                                    </td>
-                                                    <td colspan="1" class="border px-4 py-2">{{ conf[row.status] }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午前)</th>
-                                                    <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午前)</th>
-                                                    <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午後)</th>
-                                                    <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午後)</th>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_am }}</td>
-                                                    <td colspan="1" class="border px-4 py-2">{{ row.client_am }}</td>
-                                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_pm }}</td>
-                                                    <td colspan="1" class="border px-4 py-2">{{ row.client_pm }}</td>
-                                                </tr>
-                                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午前)</th>
-                                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午後)</th>
-                                                <tr>
-                                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
-                                                        {{ row.contents_am }}
-                                                    </td>
-                                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
-                                                        {{ row.contents_pm }}
-                                                    </td>
-                                                </tr>
-                                                <th colspan="6" class="bg-gray-200 border px-4 py-2">上司コメント</th>
-                                                <tr>
-                                                    <td colspan="6" class="border px-4 py-2">{{ row.comment }}</td>
-                                                </tr>
-                                            </div>
-                                        </tbody>
-                                    </table>
-                                    <table v-else class="w-full">
-                                        <tbody>
-                                            <div class="margin_bottom">
-                                                <th colspan="3" class="bg-gray-200 border px-4 py-2 w-6/12">作成日</th>
-                                                <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
-                                                <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
-                                                <tr class="border px-4 py-2">
-                                                    <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
-                                                    <td colspan="2" class="border px-4 py-2 text-center">
-                                                        <button
-                                                            v-if="judgeRole(index)"
-                                                            @click="edit(row)"
-                                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                                        >
-                                                            再提出
-                                                        </button>
-                                                    </td>
-                                                    <td colspan="1" class="border px-4 py-2">{{ conf[row.status] }}</td>
-                                                </tr>
-                                                <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午前)</th>
-                                                <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午前)</th>
-                                                <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午後)</th>
-                                                <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午後)</th>
-                                                <tr>
-                                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_am }}</td>
-                                                    <td colspan="1" class="border px-4 py-2">{{ row.client_am }}</td>
-                                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_pm }}</td>
-                                                    <td colspan="1" class="border px-4 py-2">{{ row.client_pm }}</td>
-                                                </tr>
-                                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午前)</th>
-                                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午後)</th>
-                                                <tr>
-                                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
-                                                        {{ row.contents_am }}
-                                                    </td>
-                                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
-                                                        {{ row.contents_pm }}
-                                                    </td>
-                                                </tr>
-                                                <th colspan="6" class="bg-gray-200 border px-4 py-2">上司コメント</th>
-                                                <tr>
-                                                    <td colspan="6" class="border px-4 py-2">{{ row.comment }}</td>
-                                                </tr>
-                                            </div>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </details>
-                        </section>
-                    </div>
-
+                    <table v-if="this.$page.user.role_id == 5" class="w-full">
+                        <tbody>
+                            <div v-for="(row, index) in userPosts" class="margin_bottom">
+                                <th colspan="3" class="bg-gray-200 border px-4 py-2 w-6/12">作成日</th>
+                                <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
+                                <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
+                                <tr class="border px-4 py-2">
+                                    <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
+                                    <td colspan="2" class="border px-4 py-2 text-center">
+                                        <button
+                                            @click="edit(row)"
+                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                        >
+                                            差戻し
+                                        </button>
+                                        <button
+                                            wire:click.prevent="update()"
+                                            @click="approve(row)"
+                                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                                        >
+                                            承認
+                                        </button>
+                                    </td>
+                                    <td colspan="1" class="border px-4 py-2">{{ conf[row.status] }}</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午前)</th>
+                                    <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午前)</th>
+                                    <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午後)</th>
+                                    <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午後)</th>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_am }}</td>
+                                    <td colspan="1" class="border px-4 py-2">{{ row.client_am }}</td>
+                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_pm }}</td>
+                                    <td colspan="1" class="border px-4 py-2">{{ row.client_pm }}</td>
+                                </tr>
+                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午前)</th>
+                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午後)</th>
+                                <tr>
+                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
+                                        {{ row.contents_am }}
+                                    </td>
+                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
+                                        {{ row.contents_pm }}
+                                    </td>
+                                </tr>
+                                <th colspan="6" class="bg-gray-200 border px-4 py-2">上司コメント</th>
+                                <tr>
+                                    <td colspan="6" class="border px-4 py-2">{{ row.comment }}</td>
+                                </tr>
+                            </div>
+                        </tbody>
+                    </table>
+                    <table v-else class="w-full">
+                        <tbody>
+                            <div v-for="(row, index) in userPosts" class="margin_bottom">
+                                <th colspan="3" class="bg-gray-200 border px-4 py-2 w-6/12">作成日</th>
+                                <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
+                                <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
+                                <tr class="border px-4 py-2">
+                                    <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
+                                    <td colspan="2" class="border px-4 py-2 text-center">
+                                        <button
+                                            v-if="judgeRole(index)"
+                                            @click="edit(row)"
+                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                        >
+                                            再提出
+                                        </button>
+                                    </td>
+                                    <td colspan="1" class="border px-4 py-2">{{ conf[row.status] }}</td>
+                                </tr>
+                                <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午前)</th>
+                                <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午前)</th>
+                                <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午後)</th>
+                                <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午後)</th>
+                                <tr>
+                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_am }}</td>
+                                    <td colspan="1" class="border px-4 py-2">{{ row.client_am }}</td>
+                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_pm }}</td>
+                                    <td colspan="1" class="border px-4 py-2">{{ row.client_pm }}</td>
+                                </tr>
+                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午前)</th>
+                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午後)</th>
+                                <tr>
+                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
+                                        {{ row.contents_am }}
+                                    </td>
+                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
+                                        {{ row.contents_pm }}
+                                    </td>
+                                </tr>
+                                <th colspan="6" class="bg-gray-200 border px-4 py-2">上司コメント</th>
+                                <tr>
+                                    <td colspan="6" class="border px-4 py-2">{{ row.comment }}</td>
+                                </tr>
+                            </div>
+                        </tbody>
+                    </table>
                     <div class="fixed z-10 inset-0 overflow-y-auto ease-out duration-400" v-if="isOpen">
                         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                             <div class="fixed inset-0 transition-opacity">
@@ -505,123 +493,6 @@ export default {
         },
     },
 };
-
-class Details {
-    constructor(el, settings) {
-        this.group = el;
-        this.details = this.group.getElementsByClassName('details');
-        this.toggles = this.group.getElementsByClassName('details__summary');
-        this.contents = this.group.getElementsByClassName('details__content');
-
-        // Set default settings if necessary
-        this.settings = Object.assign(
-            {
-                speed: 300,
-                one_visible: false,
-            },
-            settings,
-        );
-
-        // Setup inital positions
-        for (let i = 0; i < this.details.length; i++) {
-            const detail = this.details[i];
-            const toggle = this.toggles[i];
-            const content = this.contents[i];
-
-            // Set transition-duration to match JS setting
-            detail.style.transitionDuration = this.settings.speed + 'ms';
-
-            // Set initial height to transition from
-            if (!detail.hasAttribute('open')) {
-                detail.style.height = toggle.clientHeight + 'px';
-            } else {
-                detail.style.height = toggle.clientHeight + content.clientHeight + 'px';
-            }
-        }
-
-        // Setup click handler
-        this.group.addEventListener('click', e => {
-            if (e.target.classList.contains('details__summary')) {
-                e.preventDefault();
-
-                let num = 0;
-                for (let i = 0; i < this.toggles.length; i++) {
-                    if (this.toggles[i] === e.target) {
-                        num = i;
-                        break;
-                    }
-                }
-
-                if (!e.target.parentNode.hasAttribute('open')) {
-                    this.open(num);
-                } else {
-                    this.close(num);
-                }
-            }
-        });
-    }
-
-    open(i) {
-        const detail = this.details[i];
-        const toggle = this.toggles[i];
-        const content = this.contents[i];
-
-        // If applicable, hide all the other details first
-        if (this.settings.one_visible) {
-            for (let a = 0; a < this.toggles.length; a++) {
-                if (i !== a) this.close(a);
-            }
-        }
-
-        // Update class
-        detail.classList.remove('is-closing');
-
-        // Get height of toggle
-        const toggle_height = toggle.clientHeight;
-
-        // Momentarily show the contents just to get the height
-        detail.setAttribute('open', true);
-        const content_height = content.clientHeight;
-        detail.removeAttribute('open');
-
-        // Set the correct height and let CSS transition it
-        detail.style.height = toggle_height + content_height + 'px';
-
-        // Finally set the open attr
-        detail.setAttribute('open', true);
-    }
-
-    close(i) {
-        const detail = this.details[i];
-        const toggle = this.toggles[i];
-
-        // Update class
-        detail.classList.add('is-closing');
-
-        // Get height of toggle
-        const toggle_height = toggle.clientHeight;
-
-        // Set the height so only the toggle is visible
-        detail.style.height = toggle_height + 'px';
-
-        setTimeout(() => {
-            // Check if still closing
-            if (detail.classList.contains('is-closing')) detail.removeAttribute('open');
-            detail.classList.remove('is-closing');
-        }, this.settings.speed);
-    }
-}
-
-(() => {
-    const els = document.getElementsByClassName('details-group');
-
-    for (let i = 0; i < els.length; i++) {
-        const details = new Details(els[i], {
-            speed: 500,
-            one_visible: true,
-        });
-    }
-})();
 </script>
 <style>
 .margin_bottom {
@@ -630,118 +501,5 @@ class Details {
 
 .whiteSpace {
     word-break: break-all;
-}
-
-html,
-body {
-    min-height: 100%;
-}
-
-html {
-    overflow-y: scroll;
-    font-size: 18px;
-}
-
-body {
-    font-size: 1rem;
-    font-weight: 300;
-    font-family: Roboto, sans-serif;
-    line-height: 1.4;
-    color: #546e7a;
-    background-color: #eceff1;
-}
-
-p,
-ul,
-li {
-    margin: 0;
-    padding: 0;
-    margin-bottom: 24px;
-}
-p:last-child,
-ul:last-child,
-li:last-child {
-    margin-bottom: 0;
-}
-
-a {
-    color: #00acc1;
-}
-
-code {
-    background: #eceff1;
-}
-
-.wrapper {
-    margin-left: auto;
-    margin-right: auto;
-    padding: 10px;
-}
-
-.details-group {
-    border: 1px solid #cfd8dc;
-    border-radius: 5px;
-    background-color: white;
-}
-
-.details {
-    overflow: hidden;
-    border-bottom: 1px solid #cfd8dc;
-    transition: height 300ms ease-in-out;
-}
-.details:last-child {
-    border-bottom: 0;
-}
-.details__summary,
-.details__content {
-    padding: 24px;
-}
-.details__summary {
-    position: relative;
-    list-style: none;
-    padding-left: 48px;
-    outline: 0;
-    cursor: pointer;
-    font-size: 1.4rem;
-    font-family: Oswald;
-    text-transform: uppercase;
-    transition: color 300ms ease-in-out;
-}
-[open] > .details__summary {
-    color: #00acc1;
-}
-.details__summary::-webkit-details-marker {
-    display: none;
-}
-.details__summary:before,
-.details__summary:after {
-    content: '';
-    position: absolute;
-}
-.details__summary:before {
-    left: 20px;
-    top: 50%;
-    height: 2px;
-    margin-top: -1px;
-    width: 16px;
-    background: #00acc1;
-}
-.details__summary:after {
-    left: 28px;
-    top: 50%;
-    height: 16px;
-    margin-top: -8px;
-    width: 2px;
-    margin-left: -1px;
-    background: #00acc1;
-    transition: all 300ms ease-in-out;
-}
-[open] .details__summary:after {
-    opacity: 0;
-    transform: translateY(25%);
-}
-.details__content {
-    padding-top: 0;
-    padding-left: 48px;
 }
 </style>
