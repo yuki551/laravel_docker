@@ -72,5 +72,19 @@ class TestUserSeeder extends Seeder
                 'auth_id' => 1,
             ],
         ]);
+        DB::table('clients')->insert([
+            [
+                'id' => 1,
+                'name' => 'Apple',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Google',
+            ],
+            [
+                'id' => 3,
+                'name' => 'Amazon',
+            ],
+        ]);
     }
 }
