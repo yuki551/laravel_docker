@@ -36,7 +36,7 @@
                     </div>
                     <table v-if="this.$page.user.role_id == 5" class="w-full">
                         <tbody>
-                            <div v-for="row in userPosts" class="margin_bottom">
+                            <div v-for="(row, index) in userPosts" class="margin_bottom">
                                 <th colspan="3" class="bg-gray-200 border px-4 py-2 w-6/12">作成日</th>
                                 <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
                                 <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
@@ -90,13 +90,21 @@
                     </table>
                     <table v-else class="w-full">
                         <tbody>
-                            <div v-for="row in userPosts" class="margin_bottom">
+                            <div v-for="(row, index) in userPosts" class="margin_bottom">
                                 <th colspan="3" class="bg-gray-200 border px-4 py-2 w-6/12">作成日</th>
                                 <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
                                 <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
                                 <tr class="border px-4 py-2">
                                     <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
-                                    <td colspan="2" class="border px-4 py-2 text-center"></td>
+                                    <td colspan="2" class="border px-4 py-2 text-center">
+                                        <button
+                                            v-if="judgeRole(index)"
+                                            @click="edit(row)"
+                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                        >
+                                            再提出
+                                        </button>
+                                    </td>
                                     <td colspan="1" class="border px-4 py-2">{{ conf[row.status] }}</td>
                                 </tr>
                                 <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午前)</th>
@@ -139,7 +147,157 @@
                                 aria-modal="true"
                                 aria-labelledby="modal-headline"
                             >
-                                <form>
+                                <!-- 再提出フォーム -->
+                                <form v-if="notification == 3">
+                                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                        <div class="">
+                                            <div class="mb-4">
+                                                <label
+                                                    for="exampleFormControlInput1"
+                                                    class="block text-gray-700 text-sm font-bold mb-2"
+                                                    >名前:{{ form.username }}
+                                                </label>
+                                                <input
+                                                    type="hidden"
+                                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                    id="exampleFormControlInput1"
+                                                    placeholder="Enter Title"
+                                                    v-model="form.user"
+                                                />
+                                                <div v-if="$page.errors.title" class="text-red-500">
+                                                    {{ $page.errors.title[0] }}
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label
+                                                    for="exampleFormControlInput1"
+                                                    class="block text-gray-700 text-sm font-bold mb-2"
+                                                    >報告日時:{{ form.date }}</label
+                                                >
+                                                <input
+                                                    type="hidden"
+                                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                    id="exampleFormControlInput1"
+                                                    placeholder="Enter Title"
+                                                    v-model="form.date"
+                                                />
+                                                <div v-if="$page.errors.title" class="text-red-500">
+                                                    {{ $page.errors.title[0] }}
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label
+                                                    for="exampleFormControlInput1"
+                                                    class="block text-gray-700 text-sm font-bold mb-2"
+                                                    >所属部署:{{ form.teamname }}</label
+                                                >
+                                                <input
+                                                    type="hidden"
+                                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                    id="exampleFormControlInput1"
+                                                    placeholder="Enter Title"
+                                                    v-model="form.team"
+                                                />
+                                                <div v-if="$page.errors.title" class="text-red-500">
+                                                    {{ $page.errors.title[0] }}
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label
+                                                    for="exampleFormControlInput1"
+                                                    class="block text-gray-700 text-sm font-bold mb-2"
+                                                    >業務報告(午前):</label
+                                                >
+
+                                                <textarea
+                                                    class="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                    id="exampleFormControlInput2"
+                                                    v-model="form.summary_am"
+                                                    placeholder="業務"
+                                                ></textarea>
+                                                <div v-if="$page.errors.title" class="text-red-500">
+                                                    {{ $page.errors.title[0] }}
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <textarea
+                                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                    id="exampleFormControlInput2"
+                                                    v-model="form.contents_am"
+                                                    placeholder="内容"
+                                                ></textarea>
+                                                <div v-if="$page.errors.body" class="text-red-500">
+                                                    {{ $page.errors.body[0] }}
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label
+                                                    for="exampleFormControlInput1"
+                                                    class="block text-gray-700 text-sm font-bold mb-2"
+                                                    >業務報告(午後):</label
+                                                >
+
+                                                <textarea
+                                                    class="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                    id="exampleFormControlInput2"
+                                                    v-model="form.summary_pm"
+                                                    placeholder="業務"
+                                                ></textarea>
+                                                <div v-if="$page.errors.title" class="text-red-500">
+                                                    {{ $page.errors.title[0] }}
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <textarea
+                                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                    id="exampleFormControlInput2"
+                                                    v-model="form.contents_pm"
+                                                    placeholder="内容"
+                                                ></textarea>
+                                                <div v-if="$page.errors.body" class="text-red-500">
+                                                    {{ $page.errors.body[0] }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                        <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                                            <!-- 社長か部長の時表示 -->
+                                            <button
+                                                v-if="this.$page.user.role_id == 5 || this.$page.user.role_id == 3"
+                                                wire:click.prevent="retryPost()"
+                                                type="button"
+                                                @click="replyRow(form)"
+                                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                            >
+                                                差戻し
+                                            </button>
+                                        </span>
+                                        <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                                            <button
+                                                wire:click.prevent="retryPost()"
+                                                type="button"
+                                                @click="submission(form)"
+                                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                            >
+                                                再提出
+                                            </button>
+                                        </span>
+                                        <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
+                                            <button
+                                                @click="closeModal()"
+                                                type="button"
+                                                class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                                <!-- 差戻しフォーム -->
+                                <form v-else-if="notification == 1">
                                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                         <div class="">
                                             <div class="mb-4">
@@ -163,13 +321,25 @@
                                     </div>
                                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                         <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                                            <!-- 社長か部長の時表示 -->
                                             <button
+                                                v-if="this.$page.user.role_id == 5 || this.$page.user.role_id == 3"
                                                 wire:click.prevent="retryPost()"
                                                 type="button"
                                                 @click="replyRow(form)"
                                                 class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                                             >
                                                 差戻し
+                                            </button>
+                                        </span>
+                                        <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                                            <button
+                                                wire:click.prevent="retryPost()"
+                                                type="button"
+                                                @click="submission(form)"
+                                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                            >
+                                                再提出
                                             </button>
                                         </span>
                                         <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
@@ -208,6 +378,7 @@ export default {
                 status: 0,
                 comment: '',
             },
+            index: 0,
         };
     },
     computed: {
@@ -278,6 +449,7 @@ export default {
             this.reset();
             this.closeModal();
         },
+        // 差戻し
         replyRow: function(data) {
             data._method = 'PUT';
             data['status'] = 3;
@@ -285,11 +457,37 @@ export default {
             this.reset();
             this.closeModal();
         },
+        // 承認
         approve: function(data) {
             data._method = 'PUT';
             data['status'] = 2;
             this.$inertia.post('/dashboard/' + data.id, data);
             this.reset();
+        },
+        // 提出
+        submission: function(data) {
+            data._method = 'PUT';
+            data['status'] = 1;
+            this.$inertia.post('/dashboard/' + data.id, data);
+            this.reset();
+        },
+        // 権限判定
+        judgeRole: function(index) {
+            if (
+                // roleが一般か判定
+                this.$page.user.role_id == 10 &&
+                this.userPost[index].status == 3 &&
+                this.$page.user.id == this.userPost[index].user
+            ) {
+                return true;
+            } else if (
+                // roleが部長か判定
+                this.$page.user.role_id == 5 &&
+                this.userPost[index].status == 3 &&
+                this.$page.user.id == this.userPost[index].user
+            ) {
+                return true;
+            }
         },
     },
 };
