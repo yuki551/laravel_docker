@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
 
             $table->integer('current_team_id')->nullable();
             $table->integer('role_id')->nullable();
+            $table->integer('auth_id')->nullable();
 
             $table->timestamps();
 
@@ -33,6 +34,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
 
             $table->foreign('current_team_id')->references('id')->on('teams');
+            $table->foreign('role_id')->references('role_id')->on('roles');
         });
     }
 
