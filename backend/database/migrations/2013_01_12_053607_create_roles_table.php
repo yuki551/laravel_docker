@@ -22,6 +22,8 @@ class CreateRolesTable extends Migration
             $table->integer('created_user_id')->nullable();
             $table->integer('updated_user_id')->nullable();
             $table->boolean('deleted_flag')->nullable();
+
+            $table->unique(['role_id']);
         });
     }
 

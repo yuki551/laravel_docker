@@ -21,7 +21,8 @@ class TestUserSeeder extends Seeder
                 'email' => 'test@example.com',
                 'password' => '$2y$10$u92P1qTDvaXBKyFj5ZnqGe75Z22opIBn0arYlnRWvFIK9lW6hHiQu',
                 'current_team_id' => 2,
-                'role_id' => 1,
+                'role_id' => 10,
+                'auth_id' => 0,
             ],
             [
                 'id' => 3,
@@ -29,7 +30,8 @@ class TestUserSeeder extends Seeder
                 'email' => 'test2@example.com',
                 'password' => '$2y$10$u92P1qTDvaXBKyFj5ZnqGe75Z22opIBn0arYlnRWvFIK9lW6hHiQu',
                 'current_team_id' => 3,
-                'role_id' => 1,
+                'role_id' => 10,
+                'auth_id' => 1,
             ],
             [
 
@@ -38,7 +40,8 @@ class TestUserSeeder extends Seeder
                 'email' => 'test3@example.com',
                 'password' => '$2y$10$u92P1qTDvaXBKyFj5ZnqGe75Z22opIBn0arYlnRWvFIK9lW6hHiQu',
                 'current_team_id' => 4,
-                'role_id' => 1,
+                'role_id' => 10,
+                'auth_id' => 0,
             ],
 
             [
@@ -47,7 +50,8 @@ class TestUserSeeder extends Seeder
                 'email' => 'test4@example.com',
                 'password' => '$2y$10$u92P1qTDvaXBKyFj5ZnqGe75Z22opIBn0arYlnRWvFIK9lW6hHiQu',
                 'current_team_id' => 5,
-                'role_id' => 1,
+                'role_id' => 10,
+                'auth_id' => 0,
             ],
             [
                 'id' => 6,
@@ -55,7 +59,8 @@ class TestUserSeeder extends Seeder
                 'email' => 'test5@example.com',
                 'password' => '$2y$10$u92P1qTDvaXBKyFj5ZnqGe75Z22opIBn0arYlnRWvFIK9lW6hHiQu',
                 'current_team_id' => 1,
-                'role_id' => 10,
+                'role_id' => 3,
+                'auth_id' => 1,
             ],
             [
                 'id' => 7,
@@ -64,6 +69,7 @@ class TestUserSeeder extends Seeder
                 'password' => '$2y$10$u92P1qTDvaXBKyFj5ZnqGe75Z22opIBn0arYlnRWvFIK9lW6hHiQu',
                 'current_team_id' => 3,
                 'role_id' => 5,
+                'auth_id' => 1,
             ],
         ]);
     }

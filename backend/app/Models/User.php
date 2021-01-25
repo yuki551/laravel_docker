@@ -20,14 +20,13 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'current_team_id',
+        'name', 'email', 'password','current_team_id','role_id'
     ];
 
     /**
@@ -59,4 +58,8 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function posts(){
+        return $this->hasMany(Post::class, 'user');
+    }
 }
