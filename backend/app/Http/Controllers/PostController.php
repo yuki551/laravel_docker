@@ -44,8 +44,10 @@ class PostController extends Controller
             // 'date' => ['required'],
             'summary_am' => ['required'],
             'contents_am' => ['required'],
+            'client_am' => ['required'],
             'summary_pm' => ['required'],
             'contents_pm' => ['required'],
+            'client_pm' => ['required'],
             'status' => ['required'],
         ])->validate();
 

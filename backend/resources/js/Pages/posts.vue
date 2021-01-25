@@ -67,21 +67,38 @@
                                         {{ $page.errors.title[0] }}
                                     </div>
                                 </div>
+                                <hr>
+                                <div class="mt-4 block text-gray-700 text-sm font-bold mb-2">業務報告(午前):</div>
                                 <div class="mb-4">
-                                    <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2"
-                                        >業務報告(午前):</label
-                                    >
+                                    <label class="block text-gray-700 text-sm font-bold mb-2">
+                                        顧客名:
+                                        <select v-model="form.client_am">
+                                            <option disabled value="">顧客を選択してください</option>
+                                            <option v-for="client in client_am"
+                                                v-bind:value="client.id">
+                                                {{ client.name }}
+                                            </option>
+                                        </select>
+                                    </label>
+                                    <div v-if="$page.errors.title" class="text-red-500">
+                                        {{ $page.errors.title[0] }}
+                                    </div>
+                                </div>
 
+                                <div class="mb-4">
+                                    <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2">
                                     <textarea
                                         class="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         id="exampleFormControlInput2"
                                         v-model="form.summary_am"
                                         placeholder="業務"
                                     ></textarea>
+                                    </label>
                                     <div v-if="$page.errors.title" class="text-red-500">
                                         {{ $page.errors.title[0] }}
                                     </div>
                                 </div>
+
 
                                 <div class="mb-4">
                                     <textarea
@@ -94,17 +111,33 @@
                                         {{ $page.errors.body[0] }}
                                     </div>
                                 </div>
+                                <hr>
+                                <div class="mt-4 block text-gray-700 text-sm font-bold mb-2">業務報告(午後):</div>
                                 <div class="mb-4">
-                                    <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2"
-                                        >業務報告(午後):</label
-                                    >
+                                    <label class="block text-gray-700 text-sm font-bold mb-2">
+                                        顧客名:
+                                        <select v-model="form.client_pm">
+                                            <option disabled value="">顧客を選択してください</option>
+                                            <option v-for="client in client_pm"
+                                                v-bind:value="client.id">
+                                                {{ client.name }}
+                                            </option>
+                                        </select>
+                                    </label>
+                                    <div v-if="$page.errors.title" class="text-red-500">
+                                        {{ $page.errors.title[0] }}
+                                    </div>
+                                </div>
 
+                                <div class="mb-4">
+                                    <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2">
                                     <textarea
                                         class="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         id="exampleFormControlInput2"
                                         v-model="form.summary_pm"
                                         placeholder="業務"
                                     ></textarea>
+                                    </label>
                                     <div v-if="$page.errors.title" class="text-red-500">
                                         {{ $page.errors.title[0] }}
                                     </div>
@@ -180,6 +213,8 @@ export default {
                 date: today,
                 contents_am: null,
                 contents_pm: null,
+                client_am: null,
+                client_pm: null,
                 status: 1,
             },
             created_user_id: this.$page.user.id,
@@ -188,6 +223,16 @@ export default {
             items: [
                 { id: 1, name: '出張' },
                 { id: 2, name: '会議' },
+            ],
+            client_am: [
+                { id: 1, name: 'Apple' },
+                { id: 2, name: 'Google' },
+                { id: 3, name: 'Amazon' },
+            ],
+            client_pm: [
+                { id: 1, name: 'Apple' },
+                { id: 2, name: 'Google' },
+                { id: 3, name: 'Amazon' },
             ],
         };
     },
