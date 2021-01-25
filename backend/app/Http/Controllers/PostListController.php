@@ -25,7 +25,22 @@ class PostListController extends Controller
      */
     public function index()
     {
-        $data = User::leftjoin('posts', 'users.id', '=', 'posts.user')->where('status', '2')->get();
+        $data = Post::select(
+            'users.name as user_name',
+            'posts.created_at',
+            'summary_am',
+            'client_a.name as client_name_am',
+            'contents_am',
+            'summary_pm',
+            'client_p.name as client_name_pm',
+            'contents_pm',
+            'teams.name as team_name')
+            ->join('users', 'posts.user', '=', 'users.id')
+            ->join('teams', 'posts.team', '=', 'teams.id')
+            ->join('clients as client_a', 'posts.client_am', '=', 'client_a.id')
+            ->join('clients as client_p', 'posts.client_pm', '=', 'client_p.id')
+            ->where('status', '2')
+            ->get();
 
         $user = Auth::user();
         // var_dump($data);

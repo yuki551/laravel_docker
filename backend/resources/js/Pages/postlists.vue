@@ -37,13 +37,13 @@
                             <tr v-for="row in userPosts">
                                 <td class="border px-4 py-2">{{ row.created_at | moment("YYYY年MM月DD日") }}</td>
                                 <td class="border px-4 py-2">{{ row.summary_am }}</td>
-                                <td class="border px-4 py-2">{{ row.client_am }}</td>
+                                <td class="border px-4 py-2">{{ row.client_name_am }}</td>
                                 <td class="border px-4 py-2">{{ row.contents_am }}</td>
                                 <td class="border px-4 py-2">{{ row.summary_pm }}</td>
-                                <td class="border px-4 py-2">{{ row.client_pm }}</td>
+                                <td class="border px-4 py-2">{{ row.client_name_pm }}</td>
                                 <td class="border px-4 py-2">{{ row.contents_pm }}</td>
-                                <td class="border px-4 py-2">{{ row.team }}</td>
-                                <td class="border px-4 py-2">{{ row.name }}</td>
+                                <td class="border px-4 py-2">{{ row.team_name }}</td>
+                                <td class="border px-4 py-2">{{ row.user_name }}</td>
                             </tr>
                         </tbody>
                     </table>

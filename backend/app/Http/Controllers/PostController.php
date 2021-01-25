@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Post;
+use App\Models\Client;
 use Illuminate\Support\Facades\Validator;
 
 // config呼び出し用
@@ -26,7 +27,8 @@ class PostController extends Controller
     {
 
         $data = Post::all();
-        return Inertia::render('posts', ['data' => $data]);
+        $data2 = Client::all();
+        return Inertia::render('posts', ['data' => $data, 'data2' => $data2]);
     }
 
     /**
