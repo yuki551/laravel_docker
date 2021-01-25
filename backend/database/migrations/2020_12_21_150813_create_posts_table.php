@@ -37,6 +37,8 @@ class CreatePostsTable extends Migration
 
             $table->foreign('client_am')->references('id')->on('clients');
             $table->foreign('client_pm')->references('id')->on('clients');
+
+            $table->foreign('user')->references('id')->on('users');
         });
     }
 

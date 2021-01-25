@@ -18,9 +18,15 @@
                             </jet-nav-link>
                         </div>
 
-                        <div v-if="this.$page.user.role_id == 10" class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
                             <jet-nav-link href="/posts" :active="route().current('posts.index')">
-                                日報
+                                日報登録
+                            </jet-nav-link>
+                        </div>
+
+                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                            <jet-nav-link href="/postlists" :active="route().current('postlists.index')">
+                                日報一覧
                             </jet-nav-link>
                         </div>
                     </div>

@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 // 日報管理用controller
 use App\Http\Controllers\PostController;
+// 日報一覧表示controller
+use App\Http\Controllers\PostListController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +19,6 @@ use App\Http\Controllers\PostController;
 |
 */
 
-
 Route::get('/', function () {
     return view('login');
 });
@@ -29,3 +30,5 @@ Route::resource('dashboard', HomeController::class);
 Route::resource('posts', PostController::class);
 
 Route::resource('admin', AdminController::class);
+
+Route::resource('/postlists', PostListController::class);
