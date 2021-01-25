@@ -15,7 +15,7 @@ class Post extends Model
      * @var array
      */
     protected $fillable = [
-        'user', 'team', 'contents_am', 'contents_pm', 'summary_am', 'summary_pm', 'created_user_id', 'status', 'comment'
+        'user', 'team', 'contents_am', 'contents_pm', 'client_am', 'client_pm', 'summary_am', 'summary_pm', 'created_user_id', 'status', 'comment'
     ];
 
     public function user(){
