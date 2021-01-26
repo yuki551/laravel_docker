@@ -404,9 +404,15 @@ export default {
                         this.userPost.push(this.data[i]);
                     }
                 }
-            } else if (this.$page.user.role_id == 3 && !(this.data[i].status == 2)) {
+            } else if (this.$page.user.role_id == 3) {
                 //社長role
-                return this.data;
+                this.userPost = [];
+                for (let i = 0; i < this.data.length; i++) {
+                    if (!(this.data[i].status == 2)) {
+                        this.userPost.push(this.data[i]);
+                    }
+                }
+                return this.userPost;
             }
             return this.userPost;
         },
