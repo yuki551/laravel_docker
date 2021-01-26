@@ -37,12 +37,19 @@
                     <table v-if="this.$page.user.role_id == 5" class="w-full">
                         <tbody>
                             <div v-for="(row, index) in userPosts" class="margin_bottom">
-                                <th colspan="1" class="bg-gray-200 border px-4 py-2 w-1/12">名前</th>
-                                <th colspan="3" class="bg-gray-200 border px-4 py-2 w-5/12">作成日</th>
-                                <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
-                                <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
+                                <tr>
+                                    <th colspan="6" class="bg-gray-200 border px-4 py-2 w-1/12">名前</th>
+                                </tr>
                                 <tr class="border px-4 py-2">
-                                    <td colspan="3" class="border px-4 py-2">{{ row.name }}</td>
+                                    <td colspan="6" class="border px-4 py-2">{{ row.user_name }}</td>
+                                </tr>
+                                <tr class="border px-4 py-2">
+                                    <th colspan="3" class="bg-gray-200 border px-4 py-2 w-5/12">作成日</th>
+                                    <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
+                                    <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
+                                </tr>
+
+                                <tr class="border px-4 py-2">
                                     <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
                                     <td colspan="2" class="border px-4 py-2 text-center">
                                         <button
@@ -386,7 +393,7 @@
 </template>
 <script>
 import AppLayout from './../Layouts/AppLayout';
-console.log('aa');
+console.log('aaあ');
 export default {
     components: {
         AppLayout,
@@ -428,7 +435,7 @@ export default {
                 //社長role
                 this.userPost = [];
                 for (let i = 0; i < this.data.length; i++) {
-                    if (!(this.data[i].status == 2)) {
+                    if (!(this.data[i].status == 2) && this.$page.user.role_id == 5) {
                         this.userPost.push(this.data[i]);
                     }
                 }
