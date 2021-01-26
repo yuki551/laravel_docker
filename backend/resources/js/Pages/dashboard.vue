@@ -19,7 +19,6 @@
                 </h2>
             </div>
         </div>
-
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
@@ -45,12 +44,14 @@
                                     <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
                                     <td colspan="2" class="border px-4 py-2 text-center">
                                         <button
+                                            v-if="replyFlag(index)"
                                             @click="edit(row)"
                                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                         >
                                             差戻し
                                         </button>
                                         <button
+                                            v-if="aprFlags(index)"
                                             wire:click.prevent="update()"
                                             @click="approve(row)"
                                             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
@@ -156,7 +157,7 @@
                                                 <label
                                                     for="exampleFormControlInput1"
                                                     class="block text-gray-700 text-sm font-bold mb-2"
-                                                    >名前:{{ form.username }}
+                                                    >名前:{{ this.$page.user['name'] }}
                                                 </label>
                                                 <input
                                                     type="hidden"
@@ -173,7 +174,7 @@
                                                 <label
                                                     for="exampleFormControlInput1"
                                                     class="block text-gray-700 text-sm font-bold mb-2"
-                                                    >報告日時:{{ form.date }}</label
+                                                    >報告日時:{{ this.form['updated_at'] }}</label
                                                 >
                                                 <input
                                                     type="hidden"
@@ -190,7 +191,7 @@
                                                 <label
                                                     for="exampleFormControlInput1"
                                                     class="block text-gray-700 text-sm font-bold mb-2"
-                                                    >所属部署:{{ form.teamname }}</label
+                                                    >所属部署:{{ this.$page.user.current_team.name }}</label
                                                 >
                                                 <input
                                                     type="hidden"
@@ -322,6 +323,16 @@
                                     </div>
                                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                         <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                                            <!-- 提出したユーザーとuserが一致する時 -->
+                                            <button
+                                                v-if="this.$page.user.id == this.form.user"
+                                                wire:click.prevent="retryPost()"
+                                                type="button"
+                                                @click="submission(form)"
+                                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                            >
+                                                再提出
+                                            </button>
                                             <!-- 社長か部長の時表示 -->
                                             <button
                                                 v-if="this.$page.user.role_id == 5 || this.$page.user.role_id == 3"
@@ -333,16 +344,7 @@
                                                 差戻し
                                             </button>
                                         </span>
-                                        <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                                            <button
-                                                wire:click.prevent="retryPost()"
-                                                type="button"
-                                                @click="submission(form)"
-                                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                                            >
-                                                再提出
-                                            </button>
-                                        </span>
+                                        <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto"> </span>
                                         <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
                                             <button
                                                 @click="closeModal()"
@@ -472,6 +474,7 @@ export default {
             data['status'] = 1;
             this.$inertia.post('/dashboard/' + data.id, data);
             this.reset();
+            this.closeModal();
         },
         // 権限判定
         judgeRole: function(index) {
@@ -488,6 +491,22 @@ export default {
                 this.userPost[index].status == 3 &&
                 this.$page.user.id == this.userPost[index].user
             ) {
+                return true;
+            }
+        },
+        aprFlags: function(index) {
+            // 承認ボタン
+            if (1 == this.userPost[index]['status'] || 3 == this.userPost[index]['status']) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        replyFlag: function(index) {
+            // 差戻しボタン
+            if (3 == this.userPost[index]['status']) {
+                return false;
+            } else if (1 == this.userPost[index]['status']) {
                 return true;
             }
         },
