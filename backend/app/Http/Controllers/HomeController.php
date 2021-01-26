@@ -26,7 +26,20 @@ class HomeController extends Controller
     public function index()
     {
 
-        $data = Post::all();
+        // $data = Post::all();
+        $data = Post::select(
+            'posts.*',
+            'users.name as user_name',
+            'client_a.name as client_name_am',
+            'client_p.name as client_name_pm',
+            'teams.name as team_name',
+            )
+            ->join('users', 'posts.user', '=', 'users.id')
+            ->join('teams', 'posts.team', '=', 'teams.id')
+            ->join('clients as client_a', 'posts.client_am', '=', 'client_a.id')
+            ->join('clients as client_p', 'posts.client_pm', '=', 'client_p.id')
+            ->get();
+
         $user = Auth::user();
         // var_dump($data);
 

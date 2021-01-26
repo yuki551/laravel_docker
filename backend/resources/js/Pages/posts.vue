@@ -200,7 +200,7 @@ export default {
         AppLayout,
         FilterableDropdown,
     },
-    props: ['data', 'errors'],
+    props: ['data', 'data2', 'errors'],
     data() {
         return {
             editMode: false,
@@ -224,17 +224,19 @@ export default {
                 { id: 1, name: '出張' },
                 { id: 2, name: '会議' },
             ],
-            client_am: [
-                { id: 1, name: 'Apple' },
-                { id: 2, name: 'Google' },
-                { id: 3, name: 'Amazon' },
-            ],
-            client_pm: [
-                { id: 1, name: 'Apple' },
-                { id: 2, name: 'Google' },
-                { id: 3, name: 'Amazon' },
-            ],
         };
+    },
+    computed: {
+        // ログインしているユーザーの投稿のみデータを格納。
+        client_am: function() {
+            return this.data2;
+        },
+        client_pm: function() {
+            return this.data2;
+        },
+
+
+
     },
     methods: {
         openModal: function() {
