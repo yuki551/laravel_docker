@@ -392,7 +392,7 @@ export default {
             if (this.$page.user.role_id == 10) {
                 this.userPost = [];
                 for (let i = 0; i < this.data.length; i++) {
-                    if (this.data[i].user == this.$page.user.id) {
+                    if (this.data[i].user == this.$page.user.id && !(this.data[i].status == 2)) {
                         this.userPost.push(this.data[i]);
                     }
                 }
@@ -400,11 +400,11 @@ export default {
                 //部長role
                 this.userPost = [];
                 for (let i = 0; i < this.data.length; i++) {
-                    if (this.data[i].team == this.$page.user.current_team_id) {
+                    if (this.data[i].team == this.$page.user.current_team_id && !(this.data[i].status == 2)) {
                         this.userPost.push(this.data[i]);
                     }
                 }
-            } else if (this.$page.user.role_id == 3) {
+            } else if (this.$page.user.role_id == 3 && !(this.data[i].status == 2)) {
                 //社長role
                 return this.data;
             }
@@ -435,12 +435,6 @@ export default {
 
         reset: function() {
             (this.form = {}), (this.params = {});
-        },
-        save: function(data) {
-            this.$inertia.post('/dashboard', data);
-            this.reset();
-            this.closeModal();
-            this.editMode = false;
         },
         edit: function(data) {
             this.form = Object.assign({}, data);
