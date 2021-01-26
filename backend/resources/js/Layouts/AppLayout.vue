@@ -29,6 +29,32 @@
                                 日報一覧
                             </jet-nav-link>
                         </div>
+                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                            <jet-nav-link href="/mypostlists" :active="route().current('mypostlists.index')">
+                                my日報一覧
+                            </jet-nav-link>
+                        </div>
+                        <div v-if="this.$page.user.role_id == 5" class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                            <jet-nav-link href="/employee_create" :active="route().current('employee_create.index')">
+                                社員登録
+                            </jet-nav-link>
+                        </div>
+                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                            <jet-nav-link href="/userlists" :active="route().current('userlists.index')">
+                                社員一覧
+                            </jet-nav-link>
+                        </div>
+                        <div v-if="this.$page.user.current_team_id == 3" class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                            <jet-nav-link href="/clients_create" :active="route().current('clients_create.index')">
+                                顧客登録
+                            </jet-nav-link>
+                        </div>
+                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                            <jet-nav-link href="/clientlists" :active="route().current('clientlists.index')">
+                                顧客一覧
+                            </jet-nav-link>
+                        </div>
+
                     </div>
                     <!-- Settings Dropdown -->
                     <div class="hidden sm:flex sm:items-center sm:ml-6">

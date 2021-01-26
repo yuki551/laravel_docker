@@ -160,8 +160,27 @@ export default {
     computed: {
         // ログインしているユーザーの投稿のみデータを格納。
         userPosts: function() {
-            return this.data;
+            this.userPost = [];
+            for (let i = 0; i < this.data.length; i++) {
+                if (this.data[i].user == this.$page.user.id) {
+                    this.userPost.push(this.data[i]);
+                }
+            }
+            return this.userPost;
         },
+        // notification: function() {
+        //     for (let i = 0; i < this.userPosts.length; i++) {
+        //         // 差戻し時かつユーザーが一般ユーザーの時
+        //         if (3 == this.userPost[i]['status'] && this.$page.user.role_id == 10) {
+        //             return 3;
+        //         }
+        //         // 未承認かつ部長ユーザーの時
+        //         if (1 == this.userPost[i]['status'] && this.$page.user.role_id == 5) {
+        //             return 1;
+        //         }
+        //     }
+        // },
+        
     },
     methods: {
         // openModal: function() {

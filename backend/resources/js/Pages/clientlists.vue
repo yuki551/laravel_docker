@@ -22,28 +22,16 @@
                     <table class="table-fixed w-full">
                         <thead>
                             <tr class="bg-gray-100">
-                                <th class="px-4 py-2 w-20">作成日</th>
-                                <th class="px-4 py-2">業務(AM)</th>
-                                <th class="px-4 py-2">顧客(AM)</th>
-                                <th class="px-4 py-2">業務内容(AM)</th>
-                                <th class="px-4 py-2">業務(PM)</th>
-                                <th class="px-4 py-2">顧客(PM)</th>
-                                <th class="px-4 py-2">業務内容(PM)</th>
-                                <th class="px-4 py-2">部署</th>
+
+                                <th class="px-4 py-2">取引先</th>
                                 <th class="px-4 py-2">名前</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="row in userPosts">
-                                <td class="border px-4 py-2">{{ row.created_at | moment("YYYY年MM月DD日") }}</td>
-                                <td class="border px-4 py-2">{{ row.summary_am }}</td>
-                                <td class="border px-4 py-2">{{ row.client_name_am }}</td>
-                                <td class="border px-4 py-2">{{ row.contents_am }}</td>
-                                <td class="border px-4 py-2">{{ row.summary_pm }}</td>
-                                <td class="border px-4 py-2">{{ row.client_name_pm }}</td>
-                                <td class="border px-4 py-2">{{ row.contents_pm }}</td>
-                                <td class="border px-4 py-2">{{ row.team_name }}</td>
-                                <td class="border px-4 py-2">{{ row.user_name }}</td>
+
+                                <td class="border px-4 py-2">{{ row.id }}</td>
+                                <td class="border px-4 py-2">{{ row.name }}</td>
                             </tr>
                         </tbody>
                     </table>
