@@ -37,10 +37,12 @@
                     <table v-if="this.$page.user.role_id == 5" class="w-full">
                         <tbody>
                             <div v-for="(row, index) in userPosts" class="margin_bottom">
-                                <th colspan="3" class="bg-gray-200 border px-4 py-2 w-6/12">作成日</th>
+                                <th colspan="1" class="bg-gray-200 border px-4 py-2 w-1/12">名前</th>
+                                <th colspan="3" class="bg-gray-200 border px-4 py-2 w-5/12">作成日</th>
                                 <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
                                 <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
                                 <tr class="border px-4 py-2">
+                                    <td colspan="3" class="border px-4 py-2">{{ row.name }}</td>
                                     <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
                                     <td colspan="2" class="border px-4 py-2 text-center">
                                         <button
@@ -93,9 +95,18 @@
                     <table v-else class="w-full">
                         <tbody>
                             <div v-for="(row, index) in userPosts" class="margin_bottom">
-                                <th colspan="3" class="bg-gray-200 border px-4 py-2 w-6/12">作成日</th>
-                                <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
-                                <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
+                                <tr>
+                                    <th colspan="6" class="bg-gray-200 border px-4 py-2 w-1/12">名前</th>
+                                </tr>
+                                <tr class="border px-4 py-2">
+                                    <td colspan="6" class="border px-4 py-2">{{ row.user_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="3" class="bg-gray-200 border px-4 py-2 w-5/12">作成日</th>
+                                    <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
+                                    <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
+                                </tr>
+
                                 <tr class="border px-4 py-2">
                                     <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
                                     <td colspan="2" class="border px-4 py-2 text-center">
@@ -375,7 +386,7 @@
 </template>
 <script>
 import AppLayout from './../Layouts/AppLayout';
-
+console.log('aa');
 export default {
     components: {
         AppLayout,
