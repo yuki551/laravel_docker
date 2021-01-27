@@ -26,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','current_team_id','role_id'
+        'name', 'email', 'password', 'current_team_id', 'role_id'
     ];
 
     /**
@@ -59,4 +59,8 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public function post()
+    {
+        return $this->hasMany('App\Post');
+    }
 }
