@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Client;
 use Illuminate\Support\Facades\Validator;
 
+use Illuminate\Support\Facades\Auth;
 // config呼び出し用
 // var_dump(config('setting.hierarchy'));
 // var_dump(config('setting.status'));
@@ -25,10 +26,17 @@ class PostController extends Controller
      */
     public function index()
     {
-
+        $user = Auth::user();
         $data = Post::all();
         $data2 = Client::all();
-        return Inertia::render('posts', ['data' => $data, 'data2' => $data2]);
+
+        if ($user['role_id'] == 3) {
+            return redirect('/dashboard')->with('message', '現在の権限では日報登録にはアクセスできません。');
+        } else if ($user['role_id'] == 5 || $user['role_id'] == 10) {
+            return Inertia::render('posts', ['data' => $data, 'data2' => $data2]);
+        } else {
+            return redirect('/dashboard')->with('message', '現在の権限では日報登録にはアクセスできません。');
+        }
     }
 
     /**
