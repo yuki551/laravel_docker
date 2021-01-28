@@ -52,8 +52,14 @@ class HomeController extends Controller
     public function store(Request $request)
     {
         Validator::make($request->all(), [
+            'user' => ['required'],
+            'team' => ['required'],
             'summary_am' => ['required'],
+            'client_am' => ['required'],
             'contents_am' => ['required'],
+            'summary_pm' => ['required'],
+            'client_pm' => ['required'],
+            'contents_pm' => ['required'],
         ])->validate();
 
         Post::create($request->all());

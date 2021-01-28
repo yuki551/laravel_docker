@@ -1,5 +1,6 @@
 <template>
     <app-layout>
+        {{ usrPosNull }}
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Dashboard
@@ -12,7 +13,7 @@
                 </h2>
             </div>
         </div>
-        <div v-if="notifyReply" class="bg-blue-400 shadow">
+        <div v-if="notifyReply" class="bg-red-400 shadow">
             <div class="max-w-7xl mx-auto py-3 px-4 sm:px-6 lg:px-8 text-center">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     差戻しの日報があります。
@@ -463,6 +464,7 @@ export default {
                         this.userPost.push(this.data[i]);
                     }
                 }
+                return this.userPost;
             } else if (this.$page.user.role_id == 5) {
                 //部長role
                 this.userPost = [];
@@ -471,6 +473,7 @@ export default {
                         this.userPost.push(this.data[i]);
                     }
                 }
+                return this.userPost;
                 //---------------------------------------------------------
             } else if (this.$page.user.role_id == 3) {
                 //社長role
@@ -492,9 +495,10 @@ export default {
                 if (
                     1 == this.userPost[i]['status'] &&
                     !(this.userPost[i]['user'] == this.$page.user.id) &&
-                    (this.userPost[i]['user'] == 5 || this.$page.user.role_id == 3)
+                    (this.$page.user.role_id == 5 || this.$page.user.role_id == 3)
                 ) {
                     return true;
+                } else {
                 }
             }
         },
@@ -505,6 +509,12 @@ export default {
                 if (3 == this.userPost[i]['status'] && this.userPost[i]['user'] == this.$page.user.id) {
                     return true;
                 }
+            }
+        },
+        // ポストデータが空の時
+        usrPosNull: function() {
+            if (!this.userPost.length) {
+                this.$page.flash.message = '未処理のデータはありません。';
             }
         },
     },
