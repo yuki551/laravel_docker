@@ -602,6 +602,8 @@ export default {
                 this.$page.user.id == this.userPost[index].user
             ) {
                 return true;
+            } else {
+                return false;
             }
         },
         // --------------------------
@@ -623,6 +625,8 @@ export default {
                 return false;
                 // 差し戻しの時
             } else if (3 == this.userPost[index]['status']) {
+                return false;
+            } else {
                 return false;
             }
         },
@@ -647,6 +651,8 @@ export default {
                 // 差し戻しの時
             } else if (3 == this.userPost[index]['status']) {
                 return false;
+            } else {
+                return false;
             }
         },
         // 差戻しフォーム出現フラグ
@@ -668,6 +674,8 @@ export default {
                 // 差し戻しの時
             } else if (3 == this.form['status']) {
                 return false;
+            } else {
+                return false;
             }
         },
         // 再提出ボタン出現フラグ
@@ -685,6 +693,8 @@ export default {
                 return false;
                 // 未承認
             } else if (1 == this.userPost[index]['status']) {
+                return false;
+            } else {
                 return false;
             }
         },
@@ -704,6 +714,7 @@ export default {
             } else if (1 == this.form['status']) {
                 return false;
             } else {
+                return false;
             }
         },
         // --------------------------
