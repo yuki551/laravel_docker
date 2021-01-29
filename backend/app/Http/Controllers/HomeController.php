@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-
+        // $data = Post::all();
         $data = Post::select(
             'posts.*',
             'users.name as user_name',
@@ -34,8 +34,8 @@ class HomeController extends Controller
         )
             ->join('users', 'posts.user', '=', 'users.id')
             ->join('teams', 'posts.team', '=', 'teams.id')
-            ->join('clients as client_a', 'posts.client_am', '=', 'client_a.id')
-            ->join('clients as client_p', 'posts.client_pm', '=', 'client_p.id')
+            ->leftjoin('clients as client_a', 'posts.client_am', '=', 'client_a.id')
+            ->leftjoin('clients as client_p', 'posts.client_pm', '=', 'client_p.id')
             ->join('roles', 'roles.role_id', '=', 'users.role_id')
             ->get();
 
