@@ -48,19 +48,28 @@ class PostController extends Controller
     {
 
         //user id と team id が整合性取れる場合のみ入力できる様にしたい
-        Validator::make($request->all(), [
-            'user' => ['required'],
-            'team' => ['required'],
-            // 'date' => ['required'],
-            'summary_am' => ['required'],
-            'contents_am' => ['required'],
-            // 'client_am' => ['required'],
-            'summary_pm' => ['required'],
-            'contents_pm' => ['required'],
-            // 'client_pm' => ['required'],
-            'status' => ['required'],
-        ])->validate();
+        Validator::make(
+            $request->all(),
+            [
+                'user' => ['required'],
+                'team' => ['required'],
+                // 'date' => ['required'],
+                'summary_am' => ['required'],
+                'contents_am' => ['required'],
+                'summary_pm' => ['required'],
+                'contents_pm' => ['required'],
+                // 'client_pm' => ['required'],
+                'status' => ['required'],
+            ],
+            [
+                'summary_am.required' => '午前の業務について記載がありません。',
+                'contents_am.required' => '午前の業務内容についての記載がありません。',
+                'summary_pm.required' => '午後の業務について記載がありません。',
+                'contents_pm.required' => '午後の業務内容についての記載がありません。',
+            ],
+        )->validate();
 
+        var_dump($request);
         Post::create($request->all());
 
         return redirect()->back()
@@ -75,8 +84,8 @@ class PostController extends Controller
     public function update(Request $request)
     {
         Validator::make($request->all(), [
-            'title' => ['required'],
-            'body' => ['required'],
+            // 'title' => ['required'],
+            // 'body' => ['required'],
         ])->validate();
 
         if ($request->has('id')) {
