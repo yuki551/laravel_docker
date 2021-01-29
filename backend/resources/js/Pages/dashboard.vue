@@ -1,6 +1,6 @@
 <template>
     <app-layout>
-        {{ usrPosNull }}
+        <!-- {{ usrPosNull }} -->
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Dashboard
@@ -471,6 +471,8 @@ export default {
                 for (let i = 0; i < this.data.length; i++) {
                     if (this.data[i].team == this.$page.user.current_team_id && !(this.data[i].status == 2)) {
                         this.userPost.push(this.data[i]);
+
+                        this.otherRemand(i);
                     }
                 }
                 return this.userPost;
@@ -481,6 +483,8 @@ export default {
                 for (let i = 0; i < this.data.length; i++) {
                     if (this.data[i].status == 1 && this.data[i].role_id == 5 && !(this.data[i].status == 2)) {
                         this.userPost.push(this.data[i]);
+
+                        this.otherRemand(i);
                     }
                 }
                 return this.userPost;
@@ -519,6 +523,11 @@ export default {
         },
     },
     methods: {
+        otherRemand: function(popData) {
+            if (!(this.data[popData].user == this.$page.user.id) && this.data[popData].status == 3) {
+                this.userPost.pop();
+            }
+        },
         // --------------------------
         openModal: function() {
             this.isOpen = true;
