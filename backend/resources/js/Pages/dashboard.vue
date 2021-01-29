@@ -39,10 +39,12 @@
                         <tbody>
                             <div v-for="(row, index) in userPosts" class="margin_bottom">
                                 <tr>
-                                    <th colspan="6" class="bg-gray-200 border px-4 py-2 w-1/12">名前</th>
+                                    <th colspan="4" class="bg-gray-200 border px-4 py-2 w-1/12">名前</th>
+                                    <th colspan="2" class="bg-gray-200 border px-4 py-2 w-1/12">team</th>
                                 </tr>
                                 <tr class="border px-4 py-2">
-                                    <td colspan="6" class="border px-4 py-2">{{ row.user_name }}</td>
+                                    <td colspan="4" class="border px-4 py-2">{{ row.user_name }}</td>
+                                    <td colspan="2" class="border px-4 py-2">{{ row.team_name }}</td>
                                 </tr>
                                 <tr class="border px-4 py-2">
                                     <th colspan="3" class="bg-gray-200 border px-4 py-2 w-5/12">作成日</th>
@@ -104,10 +106,12 @@
                         <tbody>
                             <div v-for="(row, index) in userPosts" class="margin_bottom">
                                 <tr>
-                                    <th colspan="6" class="bg-gray-200 border px-4 py-2 w-1/12">名前</th>
+                                    <th colspan="4" class="bg-gray-200 border px-4 py-2 w-1/12">名前</th>
+                                    <th colspan="2" class="bg-gray-200 border px-4 py-2 w-1/12">team</th>
                                 </tr>
                                 <tr class="border px-4 py-2">
-                                    <td colspan="6" class="border px-4 py-2">{{ row.user_name }}</td>
+                                    <td colspan="4" class="border px-4 py-2">{{ row.user_name }}</td>
+                                    <td colspan="2" class="border px-4 py-2">{{ row.team_name }}</td>
                                 </tr>
                                 <tr>
                                     <th colspan="3" class="bg-gray-200 border px-4 py-2 w-5/12">作成日</th>
@@ -176,10 +180,12 @@
                         <tbody>
                             <div v-for="(row, index) in userPosts" class="margin_bottom">
                                 <tr>
-                                    <th colspan="6" class="bg-gray-200 border px-4 py-2 w-1/12">名前</th>
+                                    <th colspan="4" class="bg-gray-200 border px-4 py-2 w-1/12">名前</th>
+                                    <th colspan="2" class="bg-gray-200 border px-4 py-2 w-1/12">team</th>
                                 </tr>
                                 <tr class="border px-4 py-2">
-                                    <td colspan="6" class="border px-4 py-2">{{ row.user_name }}</td>
+                                    <td colspan="4" class="border px-4 py-2">{{ row.user_name }}</td>
+                                    <td colspan="2" class="border px-4 py-2">{{ row.team_name }}</td>
                                 </tr>
                                 <tr>
                                     <th colspan="3" class="bg-gray-200 border px-4 py-2 w-5/12">作成日</th>
