@@ -34,20 +34,17 @@
                                 my日報一覧
                             </jet-nav-link>
                         </div>
-                        <div v-if="this.$page.user.role_id == 5" class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                        <div v-if="this.$page.user.auth_id == 1" class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
                             <jet-nav-link href="/employee_create" :active="route().current('employee_create.index')">
                                 社員登録
                             </jet-nav-link>
                         </div>
                         <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
-                            <jet-nav-link href="/userlists" :active="route().current('userlists.index')">
+                            <jet-nav-link href="/users" :active="route().current('users.index')">
                                 社員一覧
                             </jet-nav-link>
                         </div>
-                        <div
-                            v-if="this.$page.user.current_team_id == 3"
-                            class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex"
-                        >
+                        <div v-if="this.$page.user.current_team_id == 3 || this.$page.user.current_team_id == 4" class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
                             <jet-nav-link href="/clients_create" :active="route().current('clients_create.index')">
                                 顧客登録
                             </jet-nav-link>
@@ -57,6 +54,19 @@
                                 顧客一覧
                             </jet-nav-link>
                         </div>
+                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                            <jet-nav-link href="/teams/create" :active="route().current('teams.create')">
+                                チーム作成
+                            </jet-nav-link>
+                        </div>
+
+                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                            <jet-nav-link href="/teamlists" :active="route().current('teamlists.index')">
+                                チーム一覧
+                            </jet-nav-link>
+                        </div>
+
+
                     </div>
                     <!-- Settings Dropdown -->
                     <div class="hidden sm:flex sm:items-center sm:ml-6">
