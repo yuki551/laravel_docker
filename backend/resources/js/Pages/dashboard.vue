@@ -22,7 +22,7 @@
         </div>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
+                <div class="dashboard-contents bg-white overflow-hidden shadow-xl sm:rounded-lg px-7 py-4">
                     <div
                         class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
                         role="alert"
@@ -35,329 +35,335 @@
                         </div>
                     </div>
 
-                    <table v-if="this.$page.user.role_id == 3" class="w-full">
-                        <tbody>
-                            <div v-for="(row, index) in userPosts" class="margin_bottom">
-                                <tr>
-                                    <th colspan="4" class="bg-gray-200 border px-4 py-2 w-1/12">名前</th>
-                                    <th colspan="2" class="bg-gray-200 border px-4 py-2 w-1/12">team</th>
-                                </tr>
-                                <tr class="border px-4 py-2">
-                                    <td colspan="4" class="border px-4 py-2">{{ row.user_name }}</td>
-                                    <td colspan="2" class="border px-4 py-2">{{ row.team_name }}</td>
-                                </tr>
-                                <tr class="border px-4 py-2">
-                                    <th colspan="3" class="bg-gray-200 border px-4 py-2 w-5/12">作成日</th>
-                                    <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
-                                    <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
-                                </tr>
-
-                                <tr class="border px-4 py-2">
-                                    <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
-                                    <td colspan="2" class="border px-4 py-2 text-center">
-                                        <button
-                                            v-if="replyFlag(index)"
-                                            @click="edit(row)"
-                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                        >
-                                            差戻し
-                                        </button>
-                                        <button
-                                            v-if="aprFlags(index)"
-                                            wire:click.prevent="update()"
-                                            @click="approve(row)"
-                                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                                        >
-                                            承認
-                                        </button>
-                                    </td>
-                                    <td colspan="1" class="border px-4 py-2">{{ conf[row.status] }}</td>
-                                </tr>
-                                <tr>
-                                    <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午前)</th>
-                                    <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午前)</th>
-                                    <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午後)</th>
-                                    <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午後)</th>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_am }}</td>
-                                    <td colspan="1" class="border px-4 py-2">{{ row.client_name_am }}</td>
-                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_pm }}</td>
-                                    <td colspan="1" class="border px-4 py-2">{{ row.client_name_pm }}</td>
-                                </tr>
-                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午前)</th>
-                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午後)</th>
-                                <tr>
-                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
-                                        {{ row.contents_am }}
-                                    </td>
-                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
-                                        {{ row.contents_pm }}
-                                    </td>
-                                </tr>
-                                <th colspan="6" class="bg-gray-200 border px-4 py-2">上司コメント</th>
-                                <tr>
-                                    <td colspan="6" class="border px-4 py-2">{{ row.comment }}</td>
-                                </tr>
+                    <!-- 社長　ここから -->
+                    <template v-if="this.$page.user.role_id == 3">
+                    <section v-if="!notifyTask">未承認の日報はありません</section>
+                    <section v-if="notifyTask" class="postslist-area postslist-unapproved">
+                        <h2 class="postslist-title">未承認日報</h2>
+                        <div class="postslist-wrap">
+                            <div class="postslist-hd">
+                                <div class="date">日報日付</div>
+                                <div class="name">提出者</div>
+                                <div class="hd-contents">日報内容</div>
+                                <div class="action"></div>
                             </div>
-                        </tbody>
-                    </table>
-                    <table v-else-if="this.$page.user.role_id == 5" class="w-full">
-                        <tbody>
-                            <div v-for="(row, index) in userPosts" class="margin_bottom">
-                                <tr>
-                                    <th colspan="4" class="bg-gray-200 border px-4 py-2 w-1/12">名前</th>
-                                    <th colspan="2" class="bg-gray-200 border px-4 py-2 w-1/12">team</th>
-                                </tr>
-                                <tr class="border px-4 py-2">
-                                    <td colspan="4" class="border px-4 py-2">{{ row.user_name }}</td>
-                                    <td colspan="2" class="border px-4 py-2">{{ row.team_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th colspan="3" class="bg-gray-200 border px-4 py-2 w-5/12">作成日</th>
-                                    <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
-                                    <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
-                                </tr>
-
-                                <tr class="border px-4 py-2">
-                                    <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
-                                    <td colspan="2" class="border px-4 py-2 text-center">
-                                        <button
-                                            v-if="resFlag(index)"
-                                            wire:click.prevent="retryPost()"
-                                            type="button"
-                                            @click="edit(row)"
-                                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                                        >
-                                            再提出
-                                        </button>
-                                        <button
-                                            v-if="replyFlag(index)"
-                                            @click="edit(row)"
-                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                        >
-                                            差戻し
-                                        </button>
-                                        <button
-                                            v-if="aprFlags(index)"
-                                            wire:click.prevent="update()"
-                                            @click="approve(row)"
-                                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                                        >
-                                            承認
-                                        </button>
-                                    </td>
-                                    <td colspan="1" class="border px-4 py-2">{{ conf[row.status] }}</td>
-                                </tr>
-                                <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午前)</th>
-                                <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午前)</th>
-                                <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午後)</th>
-                                <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午後)</th>
-                                <tr>
-                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_am }}</td>
-                                    <td colspan="1" class="border px-4 py-2">{{ row.client_name_am }}</td>
-                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_pm }}</td>
-                                    <td colspan="1" class="border px-4 py-2">{{ row.client_name_pm }}</td>
-                                </tr>
-                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午前)</th>
-                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午後)</th>
-                                <tr>
-                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
-                                        {{ row.contents_am }}
-                                    </td>
-                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
-                                        {{ row.contents_pm }}
-                                    </td>
-                                </tr>
-                                <th colspan="6" class="bg-gray-200 border px-4 py-2">上司コメント</th>
-                                <tr>
-                                    <td colspan="6" class="border px-4 py-2">{{ row.comment }}</td>
-                                </tr>
+                            <ul class="postslist-body">
+                                <template v-for="(row, index) in unapprovedPosts">
+                                <li class="postslist-item" v-bind:class="{active : accordionOpened.indexOf(row.id) >= 0}">
+                                    <div class="postslist-item-hd">
+                                        <div class="date">{{ row.created_at | moment("YYYY年MM月DD日") }}</div>
+                                        <div class="name">{{ row.user_name }}</div>
+                                        <div class="postslist-item-body">
+                                            <div class="pib-inner">
+                                                <div class="cmn-item item-am">
+                                                    <div class="cmn-item-client" v-if="row.client_name_am">取引先：{{ row.client_name_am }}</div>
+                                                    <div class="cmn-item-summary">{{ row.summary_am }}</div>
+                                                    <div class="cmn-item-contents" v-show="accordionOpened.indexOf(row.id) >= 0">{{ row.contents_am }}</div>
+                                                </div>
+                                                <div class="cmn-item item-pm">
+                                                    <div class="cmn-item-client" v-if="row.client_name_pm">取引先：{{ row.client_name_pm }}</div>
+                                                    <div class="cmn-item-summary">{{ row.summary_pm }}</div>
+                                                    <div class="cmn-item-contents" v-show="accordionOpened.indexOf(row.id) >= 0">{{ row.contents_pm }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="action" v-show="accordionOpened.indexOf(row.id) >= 0">
+                                                <div class="action-wrap">
+                                                    <div class="action-btn retry">
+                                                        <button v-if="replyFlag(index)" @click="edit(row)">差戻し</button>
+                                                    </div>
+                                                    <div class="action-btn approval">
+                                                        <button v-if="aprFlags(index)"
+                                                    wire:click.prevent="update()"
+                                                    @click="approve(row)">承認</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="action">
+                                            <div class="action-btn detail"><button @click="toggleAccordion(row.id)">日報詳細</button></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </section>
+                    </template>
+                    <!-- 社長　ここまで -->
+                    <!-- 部長　ここから -->
+                    <template v-else-if="this.$page.user.role_id == 5">
+                    <section v-if="!notifyReply && !notifyTask && !notifyWait">未承認の日報はありません</section>
+                    <section v-if="notifyReply" class="postslist-area postslist-remand">
+                        <h2 class="postslist-title">差戻し日報</h2>
+                        <div class="postslist-wrap">
+                            <div class="postslist-hd">
+                                <div class="date">日報日付</div>
+                                <div class="comment">差戻コメント</div>
+                                <div class="action"></div>
                             </div>
-                        </tbody>
-                    </table>
-                    <table v-else-if="this.$page.user.role_id == 10" class="w-full">
-                        <tbody>
-                            <div v-for="(row, index) in userPosts" class="margin_bottom">
-                                <tr>
-                                    <th colspan="4" class="bg-gray-200 border px-4 py-2 w-1/12">名前</th>
-                                    <th colspan="2" class="bg-gray-200 border px-4 py-2 w-1/12">team</th>
-                                </tr>
-                                <tr class="border px-4 py-2">
-                                    <td colspan="4" class="border px-4 py-2">{{ row.user_name }}</td>
-                                    <td colspan="2" class="border px-4 py-2">{{ row.team_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th colspan="3" class="bg-gray-200 border px-4 py-2 w-5/12">作成日</th>
-                                    <th colspan="2" class="bg-gray-200 border px-4 py-2 w-5/12">Action</th>
-                                    <th colspan="1" class="bg-gray-200 border px-4 py-2">状態</th>
-                                </tr>
-
-                                <tr class="border px-4 py-2">
-                                    <td colspan="3" class="border px-4 py-2">{{ row.created_at }}</td>
-                                    <td colspan="2" class="border px-4 py-2 text-center">
-                                        <button
-                                            v-if="judgeRole(index)"
-                                            @click="edit(row)"
-                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                        >
-                                            再提出
-                                        </button>
-                                    </td>
-                                    <td colspan="1" class="border px-4 py-2">{{ conf[row.status] }}</td>
-                                </tr>
-                                <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午前)</th>
-                                <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午前)</th>
-                                <th colspan="2" class="bg-gray-200 border px-4 py-2">概要(午後)</th>
-                                <th colspan="1" class="bg-gray-200 border px-4 py-2">営業先(午後)</th>
-                                <tr>
-                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_am }}</td>
-                                    <td colspan="1" class="border px-4 py-2">{{ row.client_name_am }}</td>
-                                    <td colspan="2" class="border px-4 py-2">{{ row.summary_pm }}</td>
-                                    <td colspan="1" class="border px-4 py-2">{{ row.client_name_pm }}</td>
-                                </tr>
-                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午前)</th>
-                                <th colspan="3" class="bg-gray-200 border px-4 py-2">内容(午後)</th>
-                                <tr>
-                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
-                                        {{ row.contents_am }}
-                                    </td>
-                                    <td colspan="3" class="border px-4 py-2 whiteSpace">
-                                        {{ row.contents_pm }}
-                                    </td>
-                                </tr>
-                                <th colspan="6" class="bg-gray-200 border px-4 py-2">上司コメント</th>
-                                <tr>
-                                    <td colspan="6" class="border px-4 py-2">{{ row.comment }}</td>
-                                </tr>
+                            <ul class="postslist-body">
+                                <template v-for="(row, index) in remandPosts">
+                                <li class="postslist-item" v-bind:class="{active : accordionOpened.indexOf(row.id) >= 0}">
+                                    <div class="postslist-item-hd">
+                                        <div class="date">{{ row.created_at | moment("YYYY年MM月DD日") }}</div>
+                                        <div class="comment">{{ row.comment }}</div>
+                                        <div class="action">
+                                            <div class="action-btn detail"><button @click="toggleAccordion(row.id)">日報詳細</button></div>
+                                            <div class="action-btn retry">
+                                                <button @click="edit(row)">再提出</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="postslist-item-body"  v-show="accordionOpened.indexOf(row.id) >= 0">
+                                        <div class="cmn-item item-am">
+                                            <div class="cmn-item-client" v-if="row.client_name_am">取引先：{{ row.client_name_am }}</div>
+                                            <div class="cmn-item-summary">{{ row.summary_am }}</div>
+                                            <div class="cmn-item-contents">{{ row.contents_am }}</div>
+                                        </div>
+                                        <div class="cmn-item item-pm">
+                                            <div class="cmn-item-client" v-if="row.client_name_pm">取引先：{{ row.client_name_pm }}</div>
+                                            <div class="cmn-item-summary">{{ row.summary_pm }}</div>
+                                            <div class="cmn-item-contents">{{ row.contents_pm }}</div>
+                                        </div>
+                                    </div>
+                                </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </section>
+                    <section v-if="notifyTask" class="postslist-area postslist-unapproved">
+                        <h2 class="postslist-title">未承認日報</h2>
+                        <div class="postslist-wrap">
+                            <div class="postslist-hd">
+                                <div class="date">日報日付</div>
+                                <div class="name">提出者</div>
+                                <div class="hd-contents">日報内容</div>
+                                <div class="action"></div>
                             </div>
-                        </tbody>
-                    </table>
+                            <ul class="postslist-body">
+                                <template v-for="(row, index) in userPosts">
+                                <li class="postslist-item" v-if="row.role_id == 10" v-bind:class="{active : accordionOpened.indexOf(row.id) >= 0}">
+                                    <div class="postslist-item-hd">
+                                        <div class="date">{{ row.created_at | moment("YYYY年MM月DD日") }}</div>
+                                        <div class="name">{{ row.user_name }}</div>
+                                        <div class="postslist-item-body">
+                                            <div class="pib-inner">
+                                                <div class="cmn-item item-am">
+                                                    <div class="cmn-item-client" v-if="row.client_name_am">取引先：{{ row.client_name_am }}</div>
+                                                    <div class="cmn-item-summary">{{ row.summary_am }}</div>
+                                                    <div class="cmn-item-contents" v-show="accordionOpened.indexOf(row.id) >= 0">{{ row.contents_am }}</div>
+                                                </div>
+                                                <div class="cmn-item item-pm">
+                                                    <div class="cmn-item-client" v-if="row.client_name_pm">取引先：{{ row.client_name_pm }}</div>
+                                                    <div class="cmn-item-summary">{{ row.summary_pm }}</div>
+                                                    <div class="cmn-item-contents" v-show="accordionOpened.indexOf(row.id) >= 0">{{ row.contents_pm }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="action" v-show="accordionOpened.indexOf(row.id) >= 0">
+                                                <div class="action-wrap">
+                                                    <div class="action-btn retry">
+                                                        <button v-if="replyFlag(index)" @click="edit(row)">差戻し</button>
+                                                    </div>
+                                                    <div class="action-btn approval">
+                                                        <button v-if="aprFlags(index)" @click="approveModal(row)">承認</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="action">
+                                            <div class="action-btn detail"><button @click="toggleAccordion(row.id)">日報詳細</button></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </section>
+                    <section v-if="notifyWait" class="postslist-area postslist-unapproved-mine">
+                        <h2 class="postslist-title">承認待ち日報</h2>
+                        <div class="postslist-wrap">
+                            <div class="postslist-hd">
+                                <div class="date">日報日付</div>
+                                <div class="hd-contents">日報内容</div>
+                                <div class="action"></div>
+                            </div>
+                            <ul class="postslist-body">
+                                <template v-for="(row, index) in unapprovedPostsMine">
+                                <li class="postslist-item" v-bind:class="{active : accordionOpened.indexOf(row.id) >= 0}">
+                                    <div class="postslist-item-hd">
+                                        <div class="date">{{ row.created_at | moment("YYYY年MM月DD日") }}</div>
+                                        <div class="postslist-item-body">
+                                            <div class="cmn-item item-am">
+                                                <div class="cmn-item-client" v-if="row.client_name_am">取引先：{{ row.client_name_am }}</div>
+                                                <div class="cmn-item-summary">{{ row.summary_am }}</div>
+                                                <div class="cmn-item-contents" v-show="accordionOpened.indexOf(row.id) >= 0">{{ row.contents_am }}</div>
+                                            </div>
+                                            <div class="cmn-item item-pm">
+                                                <div class="cmn-item-client" v-if="row.client_name_pm">取引先：{{ row.client_name_pm }}</div>
+                                                <div class="cmn-item-summary">{{ row.summary_pm }}</div>
+                                                <div class="cmn-item-contents" v-show="accordionOpened.indexOf(row.id) >= 0">{{ row.contents_pm }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="action">
+                                            <div class="action-btn detail"><button  @click="toggleAccordion(row.id)">日報詳細</button></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </section>
+                    </template>
+                    <!-- 部長　ここまで -->
+                    <!-- 一般社員　ここから -->
+                    <template v-else-if="this.$page.user.role_id == 10">
+                    <section v-if="!notifyReply && !notifyWait">未承認の日報はありません</section>
+                    <section v-if="notifyReply" class="postslist-area postslist-remand">
+                        <h2 class="postslist-title">差戻し日報</h2>
+                        <div class="postslist-wrap">
+                            <div class="postslist-hd">
+                                <div class="date">日報日付</div>
+                                <div class="comment">差戻コメント</div>
+                                <div class="action"></div>
+                            </div>
+                            <ul class="postslist-body">
+                                <template v-for="(row, index) in remandPosts">
+                                <li class="postslist-item" v-bind:class="{active : accordionOpened.indexOf(row.id) >= 0}">
+                                    <div class="postslist-item-hd">
+                                        <div class="date">{{ row.created_at | moment("YYYY年MM月DD日") }}</div>
+                                        <div class="comment">{{ row.comment }}</div>
+                                        <div class="action">
+                                            <div class="action-btn detail"><button  @click="toggleAccordion(row.id)">日報詳細</button></div>
+                                            <div class="action-btn retry">
+                                                <button @click="edit(row)">再提出</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="postslist-item-body"  v-show="accordionOpened.indexOf(row.id) >= 0">
+                                        <div class="cmn-item item-am">
+                                            <div class="cmn-item-client" v-if="row.client_name_am">取引先：{{ row.client_name_am }}</div>
+                                            <div class="cmn-item-summary">{{ row.summary_am }}</div>
+                                            <div class="cmn-item-contents">{{ row.contents_am }}</div>
+                                        </div>
+                                        <div class="cmn-item item-pm">
+                                            <div class="cmn-item-client" v-if="row.client_name_pm">取引先：{{ row.client_name_pm }}</div>
+                                            <div class="cmn-item-summary">{{ row.summary_pm }}</div>
+                                            <div class="cmn-item-contents">{{ row.contents_pm }}</div>
+                                        </div>
+                                    </div>
+                                </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </section>
+                    <section v-if="notifyWait" class="postslist-area postslist-unapproved-mine">
+                        <h2 class="postslist-title">承認待ち日報</h2>
+                        <div class="postslist-wrap">
+                            <div class="postslist-hd">
+                                <div class="date">日報日付</div>
+                                <div class="hd-contents">日報内容</div>
+                                <div class="action"></div>
+                            </div>
+                            <ul class="postslist-body">
+                                <template v-for="(row, index) in unapprovedPosts">
+                                <li class="postslist-item" v-bind:class="{active : accordionOpened.indexOf(row.id) >= 0}">
+                                    <div class="postslist-item-hd">
+                                        <div class="date">{{ row.created_at | moment("YYYY年MM月DD日") }}</div>
+                                        <div class="postslist-item-body">
+                                            <div class="cmn-item item-am">
+                                                <div class="cmn-item-client" v-if="row.client_name_am">取引先：{{ row.client_name_am }}</div>
+                                                <div class="cmn-item-summary">{{ row.summary_am }}</div>
+                                                <div class="cmn-item-contents" v-show="accordionOpened.indexOf(row.id) >= 0">{{ row.contents_am }}</div>
+                                            </div>
+                                            <div class="cmn-item item-pm">
+                                                <div class="cmn-item-client" v-if="row.client_name_pm">取引先：{{ row.client_name_pm }}</div>
+                                                <div class="cmn-item-summary">{{ row.summary_pm }}</div>
+                                                <div class="cmn-item-contents" v-show="accordionOpened.indexOf(row.id) >= 0">{{ row.contents_pm }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="action">
+                                            <div class="action-btn detail"><button  @click="toggleAccordion(row.id)">日報詳細</button></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </section>
+                    </template>
+                    <!-- 一般社員　ここまで -->
                     <div class="fixed z-10 inset-0 overflow-y-auto ease-out duration-400" v-if="isOpen">
                         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                             <div class="fixed inset-0 transition-opacity">
-                                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                                <div class="absolute inset-0 bg-gray-500 opacity-75" @click="closeModal()"></div>
                             </div>
                             <!-- This element is to trick the browser into centering the modal contents. -->
                             <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>​
                             <div
-                                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                                class="modal-form-wrap inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full"
                                 role="dialog"
                                 aria-modal="true"
                                 aria-labelledby="modal-headline"
                             >
                                 <!-- 再提出フォーム -->
-                                <form v-if="resForm()">
+                                <form v-if="resForm()" class="cmn-form-wrap form-resubmit">
                                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                        <div class="">
-                                            <div class="mb-4">
-                                                <label
-                                                    for="exampleFormControlInput1"
-                                                    class="block text-gray-700 text-sm font-bold mb-2"
-                                                    >名前:{{ this.$page.user['name'] }}
+                                        <div class="form-inner">
+                                            <div class="form-item form-date">報告日時：{{ this.form['created_at'] | moment("YYYY年MM月DD日") }}</div>
+                                            <div class="form-item form-team">所属部署：{{ this.form.team_name }}</div>
+                                            <div class="form-item form-name">名前：{{ this.form.user_name }}</div>
+                                            <input type="hidden" v-model="form.date"/>
+                                            <input type="hidden" v-model="form.team"/>
+                                            <input type="hidden" v-model="form.user"/>
+
+                                            <div class="form-item form-title"><span class="marker">業務報告(午前)</span></div>
+                                            <div class="form-item form-client">
+                                                <label>
+                                                    取引先：
+                                                    <select v-model="form.client_am">
+                                                        <option v-for="client in client_am"
+                                                            v-bind:value="client.id">
+                                                            {{ client.name }}
+                                                        </option>
+                                                    </select>
                                                 </label>
-                                                <input
-                                                    type="hidden"
-                                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                    id="exampleFormControlInput1"
-                                                    placeholder="Enter Title"
-                                                    v-model="form.user"
-                                                />
-                                                <div v-if="$page.errors.title" class="text-red-500">
-                                                    {{ $page.errors.title[0] }}
-                                                </div>
                                             </div>
-                                            <div class="mb-4">
-                                                <label
-                                                    for="exampleFormControlInput1"
-                                                    class="block text-gray-700 text-sm font-bold mb-2"
-                                                    >報告日時:{{ this.form['updated_at'] }}</label
-                                                >
-                                                <input
-                                                    type="hidden"
-                                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                    id="exampleFormControlInput1"
-                                                    placeholder="Enter Title"
-                                                    v-model="form.date"
-                                                />
-                                                <div v-if="$page.errors.title" class="text-red-500">
-                                                    {{ $page.errors.title[0] }}
-                                                </div>
+                                            <div class="form-item form-summary">
+                                                <label>
+                                                    <span>業務：</span>
+                                                    <textarea class="cmn-form-textarea" v-model="form.summary_am" placeholder="【業務】例：打ち合わせ、会議"></textarea>
+                                                </label>
                                             </div>
-                                            <div class="mb-4">
-                                                <label
-                                                    for="exampleFormControlInput1"
-                                                    class="block text-gray-700 text-sm font-bold mb-2"
-                                                    >所属部署:{{ this.$page.user.current_team.name }}</label
-                                                >
-                                                <input
-                                                    type="hidden"
-                                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                    id="exampleFormControlInput1"
-                                                    placeholder="Enter Title"
-                                                    v-model="form.team"
-                                                />
-                                                <div v-if="$page.errors.title" class="text-red-500">
-                                                    {{ $page.errors.title[0] }}
-                                                </div>
-                                            </div>
-                                            <div class="mb-4">
-                                                <label
-                                                    for="exampleFormControlInput1"
-                                                    class="block text-gray-700 text-sm font-bold mb-2"
-                                                    >業務報告(午前):</label
-                                                >
-
-                                                <textarea
-                                                    class="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                    id="exampleFormControlInput2"
-                                                    v-model="form.summary_am"
-                                                    placeholder="業務"
-                                                ></textarea>
-                                                <div v-if="$page.errors.title" class="text-red-500">
-                                                    {{ $page.errors.title[0] }}
-                                                </div>
+                                            <div class="form-item form-contents">
+                                                <label>
+                                                    <span>詳細：</span>
+                                                    <textarea class="cmn-form-textarea" v-model="form.contents_am" placeholder="業務詳細を記入してください"></textarea>
+                                                </label>
                                             </div>
 
-                                            <div class="mb-4">
-                                                <textarea
-                                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                    id="exampleFormControlInput2"
-                                                    v-model="form.contents_am"
-                                                    placeholder="内容"
-                                                ></textarea>
-                                                <div v-if="$page.errors.body" class="text-red-500">
-                                                    {{ $page.errors.body[0] }}
-                                                </div>
+                                            <div class="form-item form-title"><span class="marker">業務報告(午後)</span></div>
+                                            <div class="form-item form-client">
+                                                <label>
+                                                    取引先：
+                                                    <select v-model="form.client_pm">
+                                                        <option v-for="client in client_pm"
+                                                            v-bind:value="client.id">
+                                                            {{ client.name }}
+                                                        </option>
+                                                    </select>
+                                                </label>
                                             </div>
-                                            <div class="mb-4">
-                                                <label
-                                                    for="exampleFormControlInput1"
-                                                    class="block text-gray-700 text-sm font-bold mb-2"
-                                                    >業務報告(午後):</label
-                                                >
-
-                                                <textarea
-                                                    class="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                    id="exampleFormControlInput2"
-                                                    v-model="form.summary_pm"
-                                                    placeholder="業務"
-                                                ></textarea>
-                                                <div v-if="$page.errors.title" class="text-red-500">
-                                                    {{ $page.errors.title[0] }}
-                                                </div>
+                                            <div class="form-item form-summary">
+                                                <label>
+                                                    <span>業務：</span>
+                                                    <textarea class="cmn-form-textarea" v-model="form.summary_pm" placeholder="【業務】例：打ち合わせ、会議"></textarea>
+                                                </label>
                                             </div>
-
-                                            <div class="mb-4">
-                                                <textarea
-                                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                    id="exampleFormControlInput2"
-                                                    v-model="form.contents_pm"
-                                                    placeholder="内容"
-                                                ></textarea>
-                                                <div v-if="$page.errors.body" class="text-red-500">
-                                                    {{ $page.errors.body[0] }}
-                                                </div>
+                                            <div class="form-item form-contents">
+                                                <label>
+                                                    <span>詳細：</span>
+                                                    <textarea class="cmn-form-textarea" v-model="form.contents_pm" placeholder="業務詳細を記入してください"></textarea>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -365,75 +371,87 @@
                                         <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
                                             <button
                                                 wire:click.prevent="retryPost()"
-                                                type="button"
                                                 @click="submission(form)"
-                                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                                            >
-                                                再提出
-                                            </button>
+                                                type="button"
+                                                class="cmn-formbtn btn-submission">再提出</button>
                                         </span>
                                         <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
+                                            <button @click="closeModal()" type="button" class="cmn-formbtn btn-cancel">キャンセル</button>
+                                        </span>
+                                    </div>
+                                </form>
+                                <!-- 承認確認 -->
+                                <form v-else-if="approveFlag" class="cmn-form-wrap  form-approve">
+                                    <div class="bg-white px-7 pt-7 pb-7 sm:p-6 sm:pb-4">
+                                        <div class="form-inner">
+                                            <div class="form-item form-date">報告日時：{{ this.form['created_at'] | moment("YYYY年MM月DD日") }}</div>
+                                            <div class="form-item form-team">所属部署：{{ this.form.team_name }}</div>
+                                            <div class="form-item form-name">名前：{{ this.form.user_name }}</div>
+
+                                            <div class="form-item form-title"><span class="marker">業務報告(午前)</span></div>
+                                            <div class="form-item form-client">取引先：{{ this.form.client_name_am }}</div>
+                                            <div class="form-item form-summary">業務：{{ this.form.summary_am }}</div>
+                                            <div class="form-item form-contents">{{ this.form.contents_am }}</div>
+
+                                            <div class="form-item form-title"><span class="marker">業務報告(午後)</span></div>
+                                            <div class="form-item form-client">取引先：{{ this.form.client_name_pm }}</div>
+                                            <div class="form-item form-summary">業務：{{ this.form.summary_pm }}</div>
+                                            <div class="form-item form-contents">{{ this.form.contents_pm }}</div>
+
+                                            <input type="hidden" v-model="form.date"/>
+                                            <input type="hidden" v-model="form.team"/>
+                                            <input type="hidden" v-model="form.user"/>
+                                            <input type="hidden" v-model="form.client_am"/>
+                                            <input type="hidden" v-model="form.summary_am"/>
+                                            <input type="hidden" v-model="form.contents_am"/>
+                                            <input type="hidden" v-model="form.client_pm"/>
+                                            <input type="hidden" v-model="form.summary_pm"/>
+                                            <input type="hidden" v-model="form.contents_pm"/>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                        <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
                                             <button
-                                                @click="closeModal()"
+                                                wire:click.prevent="update()"
+                                                @click="approve(form)"
                                                 type="button"
-                                                class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-                                            >
-                                                Cancel
-                                            </button>
+                                                class="cmn-formbtn btn-approve"
+                                            >承認</button>
+                                        </span>
+                                        <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
+                                            <button @click="closeModal()" type="button" class="cmn-formbtn btn-cancel">キャンセル</button>
                                         </span>
                                     </div>
                                 </form>
                                 <!-- 差戻しフォーム -->
-                                <form v-else-if="replyForm()">
+                                <form v-else-if="replyForm()" class="cmn-form-wrap form-remand">
                                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                        <div class="">
-                                            <div class="mb-4">
-                                                <label
-                                                    for="exampleFormControlInput2"
-                                                    class="block text-gray-700 text-sm font-bold mb-2"
-                                                    >差し戻しコメント:</label
-                                                >
-                                                <textarea
-                                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                    id="exampleFormControlInput2"
-                                                    v-model="form.comment"
-                                                    placeholder="Enter comment"
-                                                ></textarea>
-
-                                                <div v-if="$page.errors.body" class="text-red-500">
-                                                    {{ $page.errors.body[0] }}
-                                                </div>
+                                        <div class="form-inner">
+                                            <div class="form-item form-remand-comment">
+                                                <label>
+                                                    <span>差し戻しコメント：</span>
+                                                    <textarea class="cmn-form-textarea" v-model="form.comment" placeholder="差戻し理由を記入してください。"></textarea>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                         <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
                                             <button
-                                                v-if="replyForm(index)"
                                                 wire:click.prevent="retryPost()"
-                                                type="button"
                                                 @click="replyRow(form)"
-                                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                                            >
-                                                差戻し
-                                            </button>
+                                                type="button"
+                                                class="cmn-formbtn btn-remand">差戻し</button>
                                         </span>
                                         <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
-                                            <button
-                                                @click="closeModal()"
-                                                type="button"
-                                                class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-                                            >
-                                                Cancel
-                                            </button>
+                                            <button @click="closeModal()" type="button" class="cmn-formbtn btn-cancel">キャンセル</button>
                                         </span>
-                                        <!-- <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto"> </span>
-                                        <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto"> </span> -->
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -445,11 +463,13 @@ export default {
     components: {
         AppLayout,
     },
-    props: ['data', 'errors', 'conf'],
+    props: ['data', 'data2', 'errors', 'conf'],
     data() {
         return {
             editMode: false,
             isOpen: false,
+            approveFlag: false,
+            accordionOpened: [],
             userPost: [],
             status: 0,
             form: {
@@ -498,6 +518,24 @@ export default {
             }
             return this.userPost;
         },
+        // 差戻しデータ取得
+        remandPosts() {
+            return this.userPosts.filter(row => {
+                return row.status == 3
+            })
+        },
+        // 未承認データ取得
+        unapprovedPosts() {
+            return this.userPosts.filter(row => {
+                return row.status == 1
+            })
+        },
+        // 未承認データから自分の提出日報を抽出
+        unapprovedPostsMine() {
+            return this.unapprovedPosts.filter(row => {
+                return row.user == this.$page.user.id
+            })
+        },
         // 未承認日報がある時
         notifyTask: function() {
             for (let i = 0; i < this.userPosts.length; i++) {
@@ -521,11 +559,26 @@ export default {
                 }
             }
         },
+        // 自分の未承認日報
+        notifyWait: function() {
+            for (let i = 0; i < this.userPosts.length; i++) {
+                // 未承認状態のpostがログインしているユーザーと同一のものがある時
+                if (1 == this.userPost[i]['status'] && this.userPost[i]['user'] == this.$page.user.id) {
+                    return true;
+                }
+            }
+        },
         // ポストデータが空の時
         usrPosNull: function() {
             if (!this.userPost.length) {
                 this.$page.flash.message = '未処理のデータはありません。';
             }
+        },
+        client_am: function() {
+            return this.data2;
+        },
+        client_pm: function() {
+            return this.data2;
         },
     },
     methods: {
@@ -542,6 +595,15 @@ export default {
             this.isOpen = false;
             this.reset();
             this.editMode = false;
+            this.approveFlag = false;
+        },
+        toggleAccordion: function(data){
+            if (this.accordionOpened.indexOf(data) >= 0) {
+                this.accordionOpened = this.accordionOpened.filter(n => n !== data)
+            }
+            else {
+                this.accordionOpened.push(data)
+            }
         },
         reset: function() {
             (this.form = {}), (this.params = {});
@@ -550,6 +612,11 @@ export default {
             this.form = Object.assign({}, userPost);
             // console.log(this.form);
             this.editMode = true;
+            this.openModal();
+        },
+        approveModal: function(userPost) {
+            this.approveFlag = true;
+            this.form = Object.assign({}, userPost);
             this.openModal();
         },
         update: function(data) {
@@ -576,6 +643,7 @@ export default {
             delete data['role_id'];
             this.$inertia.post('/dashboard/' + data.id, data);
             this.reset();
+            this.closeModal();
         },
         // 提出処理
         submission: function(data) {

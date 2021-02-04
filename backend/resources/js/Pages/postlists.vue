@@ -24,29 +24,25 @@
                             <tr class="bg-gray-100">
                                 <th class="px-4 py-2 w-20">作成日</th>
                                 <th class="px-4 py-2">業務(AM)</th>
-                                <th class="px-4 py-2">顧客(AM)</th>
                                 <th class="px-4 py-2">業務内容(AM)</th>
                                 <th class="px-4 py-2">業務(PM)</th>
-                                <th class="px-4 py-2">顧客(PM)</th>
                                 <th class="px-4 py-2">業務内容(PM)</th>
-                                <th class="px-4 py-2">部署</th>
-                                <th class="px-4 py-2">名前</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="row in userPosts">
                                 <td class="border px-4 py-2">{{ row.created_at | moment("YYYY年MM月DD日") }}</td>
                                 <td class="border px-4 py-2">{{ row.summary_am }}</td>
-                                <td class="border px-4 py-2">{{ row.client_name_am }}</td>
                                 <td class="border px-4 py-2">{{ row.contents_am }}</td>
                                 <td class="border px-4 py-2">{{ row.summary_pm }}</td>
-                                <td class="border px-4 py-2">{{ row.client_name_pm }}</td>
                                 <td class="border px-4 py-2">{{ row.contents_pm }}</td>
-                                <td class="border px-4 py-2">{{ row.team_name }}</td>
-                                <td class="border px-4 py-2">{{ row.user_name }}</td>
                             </tr>
                         </tbody>
                     </table>
+
+                    <div class="page">
+                        <!-- {{ links }} -->
+                    </div>
                     <div class="fixed z-10 inset-0 overflow-y-auto ease-out duration-400" v-if="isOpen">
                         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                             <div class="fixed inset-0 transition-opacity">
@@ -146,12 +142,13 @@ export default {
     components: {
         AppLayout,
     },
-    props: ['data', 'errors', 'conf'],
+    props: ['data', 'link', 'errors', 'conf'],
     data() {
         return {
             editMode: false,
             isOpen: false,
             userPost: [],
+            posts: [],
             form: {
                 status: 0,
             },
@@ -162,6 +159,9 @@ export default {
         userPosts: function() {
             return this.data;
         },
+        links: function(){
+            return this.link;
+        }
     },
     methods: {
         // openModal: function() {

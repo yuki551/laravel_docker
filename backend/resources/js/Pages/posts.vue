@@ -67,6 +67,7 @@
                                         {{ $page.errors.title[0] }}
                                     </div>
                                 </div>
+
                                 <hr>
                                 <div class="mt-4 block text-gray-700 text-sm font-bold mb-2">業務報告(午前):</div>
                                 <div class="mb-4">
@@ -167,6 +168,7 @@
                                 >
                                     提出
                                 </button>
+                                <!-- buttonのクリック時のメソッドを変更 02/02 -->
                             </span>
                             <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
                                 <button
@@ -181,6 +183,8 @@
                             </span>
                         </div>
                         <input type="hidden" v-model="form.status" />
+                        <input type="hidden" v-model="form.confirm" />
+                        <!-- confirm送信input追加 02/02 -->
                     </form>
                 </div>
             </div>
@@ -216,6 +220,8 @@ export default {
                 client_am: null,
                 client_pm: null,
                 status: 1,
+                confirm: 1,
+                // confirm追加 02/02
             },
             created_user_id: this.$page.user.id,
             summary_am: null,
@@ -262,6 +268,11 @@ export default {
             data._method = 'PUT';
             this.$inertia.post('/posts/' + data.id, data);
             this.reset();
+        },
+        // confirm追加 02/02
+        confirm(data){
+            data._method = 'POST';
+            this.form.post(route('post.confirm'));
         },
     },
 };

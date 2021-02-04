@@ -42,7 +42,8 @@
                                     <label class="block text-gray-700 text-sm font-bold mb-2">
                                     メールアドレス:
                                     <input
-                                        type="text"
+                                        type="mail"
+                                        readonly onfocus="this.removeAttribute('readonly');"
                                         class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
                                         placeholder="メールアドレスを入力してください"
                                         v-model="form.email"
@@ -57,7 +58,8 @@
                                     <label class="block text-gray-700 text-sm font-bold mb-2">
                                     パスワード:
                                     <input
-                                        type="text"
+                                        type="password"
+                                        readonly onfocus="this.removeAttribute('readonly');"
                                         class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
                                         placeholder="パスワードを入力してください"
                                         v-model="form.password"
@@ -160,17 +162,17 @@ export default {
         JetButton,
         JetInputError,
     },
-    props: ['dataTeam','dataRole'],
+    props: ['data', 'dataTeam','dataRole'],
     data() {
         return {
             editMode: false,
             isOpen: false,
             form: this.$inertia.form( {
 
-                name: null,
-                email: null,
-                password: null,
-                current_team_id: "",
+                name: this.data.oldname,
+                email: this.data.oldemail,
+                password: this.data.oldpassword,
+                current_team_id: this.data.oldteam,
                 role_id: "10",
                 auth_id: "0",
                 confirm: 1,
@@ -207,7 +209,7 @@ export default {
         },
         save: function(data) {
             data._method = "POST";
-            this.$inertia.post('/users/confirm', data);
+            this.$inertia.post('/users', data);
             this.reset();
         },
         edit: function(data) {

@@ -23,6 +23,8 @@
                         <div class="postslist-wrap">
                             <div class="postslist-hd">
                                 <div class="date">日報日付</div>
+                                <div class="team">部署</div>
+                                <div class="name">提出者</div>
                                 <div class="hd-contents">日報内容</div>
                                 <div class="action"></div>
                             </div>
@@ -31,6 +33,8 @@
                                 <li class="postslist-item" v-bind:class="{active : accordionOpened.indexOf(row.id) >= 0}">
                                     <div class="postslist-item-hd">
                                         <div class="date">{{ row.created_at | moment("YYYY年MM月DD日") }}</div>
+                                        <div class="team" :class="'team-0' + row.team">{{ row.team_name }}</div>
+                                        <div class="name">{{ row.user_name }}</div>
                                         <div class="postslist-item-body">
                                             <div class="pib-inner">
                                                 <div class="cmn-item item-am">
@@ -106,7 +110,7 @@
     </app-layout>
 </template>
 <script>
-import AppLayout from './../Layouts/AppLayout';
+import AppLayout from './../../Layouts/AppLayout';
 export default {
     components: {
         AppLayout,
@@ -126,13 +130,7 @@ export default {
     computed: {
         // ログインしているユーザーの投稿のみデータを格納。
         userPosts: function() {
-            this.userPost = [];
-            for (let i = 0; i < this.data.length; i++) {
-                if (this.data[i].user == this.$page.user.id) {
-                    this.userPost.push(this.data[i]);
-                }
-            }
-            return this.userPost;
+            return this.data;
         },
     },
     methods: {
@@ -154,6 +152,7 @@ export default {
             this.form = Object.assign({}, userPost);
             this.openModal();
         },
+
     },
 };
 </script>

@@ -1,0 +1,414 @@
+@import "setting";
+
+button:focus {
+    outline: none;
+}
+
+.dashboard-contents {
+    color: $c-black;
+}
+
+.postslist {
+    &-area {
+        margin: 30px auto;
+        font-size: 14px;
+    }
+
+    &-title {
+        font-weight: bold;
+        margin-bottom: 20px;
+        padding-bottom: 5px;
+        font-size: 18px;
+        border-bottom: 2px solid $c-main;
+    }
+
+    &-hd {
+        background: $c-mainbg;
+        border: 1px solid $c-border;
+        color: $c-main;
+        font-weight: bold;
+        display: flex;
+    }
+
+    &-item-hd {
+        display: flex;
+    }
+
+    &-hd,
+    &-item-hd {
+        text-align: center;
+
+        // align-items: center;
+        .date,
+        .comment,
+        .action,
+        .name,
+        .team {
+            white-space: pre-line;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .date {
+            width: 150px;
+        }
+
+        .team {
+            width: 100px;
+            border-left: 1px solid $c-border;
+        }
+
+        .comment {
+            padding: 20px 15px;
+            flex: 1;
+            border-left: 1px solid $c-border;
+            border-right: 1px solid $c-border;
+        }
+
+        .action {
+            width: 150px;
+        }
+    }
+
+    &-item-hd {
+        border: 1px solid $c-border;
+        border-top: 0;
+
+        .comment {
+            justify-content: flex-start;
+        }
+
+        .team {
+            background: #fff8e4;
+
+            &-01 {
+                background: #ffdbdb;
+            }
+
+            &-02 {
+                background: #e3d1f7;
+            }
+
+            &-03 {
+                background: #fff8e4;
+            }
+
+            &-04 {
+                background: #cbeaff;
+            }
+
+            &-05 {
+                background: #d2f7d6;
+            }
+        }
+    }
+
+    &-item-body {
+        border: 1px solid $c-border;
+        border-top: 0;
+        display: flex;
+        background: #f3f3f3;
+        white-space: pre-line;
+
+        .cmn-item {
+            width: 50%;
+            padding: 20px;
+            text-align: left;
+
+            &.item-am {
+                border-right: 1px solid $c-border2;
+            }
+
+            &-client {
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+
+            &-summary {
+                font-weight: bold;
+            }
+
+            &-contents {
+                position: relative;
+                padding-top: 10px;
+                margin-top: 6px;
+                border-top: 1px solid $c-border2;
+
+            }
+        }
+    }
+}
+
+.postslist-remand {
+    .postslist-title {
+        border-bottom: 2px solid $c-red;
+    }
+
+    .postslist-item-body .cmn-item.item-am {
+        border-right: 1px solid $c-border;
+    }
+
+}
+
+.postslist-unapproved {
+    .postslist-remand+& {
+        margin-top: 100px;
+    }
+
+    .postslist-title {
+        border-color: #76a9fa;
+    }
+
+    .date {
+        width: 150px;
+    }
+
+    .name {
+        width: 150px;
+        padding: 0 15px;
+        border-left: 1px solid $c-border;
+    }
+
+    .hd-contents {
+        padding: 20px 15px;
+        flex: 1;
+        border-left: 1px solid $c-border;
+        border-right: 1px solid $c-border;
+    }
+
+    .action {
+        width: 100px;
+        flex-direction: column;
+
+        &-btn.detail {
+            margin-right: 0;
+        }
+
+        button {
+            width: 70px;
+        }
+    }
+
+    .postslist-item-body {
+        flex: 1;
+        border-bottom: 0;
+        background: #fff;
+        display: block;
+
+        .pib-inner {
+            display: flex;
+        }
+
+        .action {
+            width: 100%;
+            border-top: 1px solid $c-border2;
+
+            &-wrap {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            &-btn {
+                margin: 0 10px;
+            }
+        }
+    }
+}
+
+.postslist-unapproved-mine {
+    .postslist-unapproved+& {
+        margin-top: 100px;
+    }
+
+    .postslist-remand+& {
+        margin-top: 100px;
+    }
+
+    .date {
+        width: 150px;
+    }
+
+    .hd-contents {
+        padding: 20px 15px;
+        flex: 1;
+        border-left: 1px solid $c-border;
+        border-right: 1px solid $c-border;
+    }
+
+    .action {
+        width: 150px;
+    }
+
+    .postslist-item-body {
+        flex: 1;
+        border-bottom: 0;
+        background: #fff;
+    }
+}
+
+
+.action {
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;
+
+    &-btn {
+        button {
+            border: 2px solid #6c6c6c;
+            color: #6c6c6c;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 0 auto;
+            text-align: center;
+            padding: 5px;
+            font-weight: bold;
+            transition: .3s;
+        }
+
+        &.detail {
+            margin-right: 5px;
+
+            & button:hover,
+            .postslist-item.active & button {
+                background: #6c6c6c;
+                color: #fff;
+                transition: .3s;
+            }
+        }
+
+        &.retry button {
+            border: 2px solid $c-red;
+            color: $c-red;
+
+            &:hover {
+                background: $c-red;
+                color: #fff;
+            }
+        }
+
+        &.detail-modal button,
+        &.approval button {
+            border: 2px solid $c-main;
+            color: $c-main;
+
+            &:hover {
+                background: $c-main;
+                color: #fff;
+            }
+        }
+
+        &.detail-modal button {
+            line-height: 1.3;
+            padding: 6px 0 4px;
+        }
+    }
+}
+
+.cmn-form-wrap {
+    .form-note {
+        margin-bottom: 30px;
+        color: $c-red;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .cmn-formbtn {
+        display: inline-block;
+        background: #fff;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+        border: 1px solid $c-border;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        padding: 8px 10px;
+        transition: .3s;
+        min-width: 100px;
+
+        &:hover {
+            opacity: 0.6;
+            transition: .3s;
+        }
+    }
+
+    &.form-post-create .cmn-formbtn,
+    .cmn-formbtn-main,
+    .btn-approve {
+        background: $c-main;
+        border: none;
+        color: #fff;
+    }
+
+    .btn-submission,
+    .btn-remand {
+        background: $c-red;
+        border: none;
+        color: #fff;
+    }
+
+    .form {
+        &-inner {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        &-item {
+            margin-bottom: 10px;
+
+            &.form-title {
+                font-size: 16px;
+                padding-top: 20px;
+                margin: 20px 0 10px;
+                border-top: 1px solid $c-border;
+            }
+        }
+
+        &-client {
+            select {
+                border-bottom: 2px solid #cecece;
+            }
+        }
+
+        &-contents {
+            font-weight: normal;
+
+            .cmn-form-textarea {
+                height: 100px;
+            }
+        }
+
+        &-summary,
+        &-contents {
+            span {
+                display: block;
+                font-weight: bold;
+            }
+        }
+    }
+
+    .cmn-form-textarea {
+        appearance: none;
+        border: 1px solid $c-border;
+        padding: 10px;
+        width: 100%;
+        border-radius: 5px;
+    }
+
+}
+
+.modal-form-wrap {
+    max-width: 70%;
+
+    .form-remand {
+        textarea {
+            height: 300px;
+        }
+    }
+}
+
+
+.marker {
+    background: linear-gradient(transparent 60%, #fffec1 0%);
+}

@@ -7,7 +7,9 @@ use Inertia\Inertia;
 use App\Models\User;
 use App\Models\Team;
 use App\Models\Role;
+use App\Http\Requests\UserStoreRequest;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeCreateController extends Controller
 {
@@ -23,7 +25,7 @@ class EmployeeCreateController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
         Validator::make($request->all(), [
             'name' => ['required'],
@@ -31,11 +33,28 @@ class EmployeeCreateController extends Controller
             'password' => ['required'],
             'current_team_id' => ['required'],
             'role_id' => ['required'],
-        ])->validate();
+            'auth_id' => ['required'],
+        ])->validateWithBag('userCreate');
 
-        User::create($request->all());
+        // $request->user()->fill([
+        //     'password' => Hash::make($request->newPassword)
+        // ])->save();
 
-        return redirect()->back()
+
+        $user = new User();
+        // var_dump($data);
+        $newpass = Hash::make($request->password);
+        
+        $user->create([
+            'name' => $request->name,
+            'email' => $request->email, 
+            'password' => $newpass, 
+            'current_team_id' => $request->current_team_id, 
+            'role_id' => $request->role_id,
+            'auth_id' => $request->auth_id,
+        ]);
+
+        return redirect()->route('user.index')
             ->with('message', '登録されました。');
     }
 }

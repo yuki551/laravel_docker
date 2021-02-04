@@ -36,8 +36,8 @@
                                         v-model="form.id"
                                     />
                                     </label>
-                                    <div v-if="$page.errors.title" class="text-red-500">
-                                        {{ $page.errors.title[0] }}
+                                    <div v-if="$page.errors.id" class="text-red-500">
+                                        {{ $page.errors.id[0] }}
                                     </div>
                                 </div>
 
@@ -52,8 +52,8 @@
                                         v-model="form.name"
                                     />
                                     </label>
-                                    <div v-if="$page.errors.title" class="text-red-500">
-                                        {{ $page.errors.title[0] }}
+                                    <div v-if="$page.errors.name" class="text-red-500">
+                                        {{ $page.errors.name[0] }}
                                     </div>
                                 </div>
 
@@ -67,8 +67,8 @@
                                         v-model="form.email"
                                     />
                                     </label>
-                                    <div v-if="$page.errors.title" class="text-red-500">
-                                        {{ $page.errors.title[0] }}
+                                    <div v-if="$page.errors.email" class="text-red-500">
+                                        {{ $page.errors.email[0] }}
                                     </div>
                                 </div>
 
@@ -84,8 +84,8 @@
                                             </option>
                                         </select>
                                     </label>
-                                    <div v-if="$page.errors.title" class="text-red-500">
-                                        {{ $page.errors.title[0] }}
+                                    <div v-if="$page.errors.current_team_id" class="text-red-500">
+                                        {{ $page.errors.current_team_id[0] }}
                                     </div>
                                 </div>
 
@@ -100,8 +100,8 @@
                                             </option>
                                         </select>
                                     </label>
-                                    <div v-if="$page.errors.title" class="text-red-500">
-                                        {{ $page.errors.title[0] }}
+                                    <div v-if="$page.errors.role_id" class="text-red-500">
+                                        {{ $page.errors.role_id[0] }}
                                     </div>
                                 </div>
 
@@ -116,8 +116,8 @@
                                             </option>
                                         </select>
                                     </label>
-                                    <div v-if="$page.errors.title" class="text-red-500">
-                                        {{ $page.errors.title[0] }}
+                                    <div v-if="$page.errors.auth_id" class="text-red-500">
+                                        {{ $page.errors.auth_id[0] }}
                                     </div>
                                 </div>
 

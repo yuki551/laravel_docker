@@ -46,7 +46,8 @@ Route::redirect('/', 'dashboard');
 
 Route::resource('dashboard', HomeController::class);
 // 日報管理用controllerへroute
-Route::resource('posts', PostController::class);
+// Route::resource('posts', PostController::class);
+
 
 Route::resource('admin', AdminController::class);
 
@@ -63,6 +64,20 @@ Route::resource('/employee_create', EmployeeCreateController::class);
 // Route::post('/employee_edit', [EmployeeEditController::class, 'post']);
 
 // Route::resource('/users/confirm', UserConfirmController::class);
+
+
+Route::get('/posts', [PostController::class, 'index'])
+    ->name('post.index');
+Route::get('/posts/create', [PostController::class, 'create'])
+    ->name('post.create');
+Route::post('/posts', [PostController::class, 'store'])
+    ->name('post.store');
+Route::put('/posts/{post}', [PostController::class, 'update'])
+    ->name('post.update');
+Route::delete('/posts/{post}', [PostController::class, 'destroy'])
+    ->name('post.destroy');
+Route::post('/posts/confirm', [PostController::class, 'confirm'])
+    ->name('post.confirm');
 
 
 Route::get('/users', [UserController::class, 'index'])
@@ -82,6 +97,8 @@ Route::delete('/users/{user}', [UserController::class, 'destroy'])
 Route::post('/users/confirm', [UserController::class, 'confirm'])
     ->name('user.confirm');
 
+
+
 Route::get('/teamlists', [TeamListController::class, 'index'])
     ->name('teamlist.index');
 Route::get('/teamlists/create', [TeamListController::class, 'create'])
@@ -98,4 +115,3 @@ Route::delete('/teamlists/{teamlist}', [TeamListController::class, 'destroy'])
     ->name('teamlist.destroy');
 Route::post('/teamlists/confirm', [TeamListController::class, 'confirm'])
     ->name('teamlist.confirm');
-

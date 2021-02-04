@@ -75,7 +75,7 @@
 
                                     <div class="mb-4">
                                         <label class="block text-gray-700 text-sm font-bold mb-2">
-                                        パスワード:{{form.password}}
+                                        パスワード:非表示
                                         <input
                                             type="hidden"
                                             class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
@@ -137,7 +137,6 @@
 
                             </div>
                         </div>
-
 
                         <div v-if="form.confirm == 1">
                             <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -237,6 +236,7 @@ export default {
             this.$inertia.post('/users', data);
             this.reset();
         },
+
         edit: function(data) {
             this.form = Object.assign({}, data);
             this.editMode = true;

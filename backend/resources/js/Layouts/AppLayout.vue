@@ -18,59 +18,27 @@
                             </jet-nav-link>
                         </div>
 
-                        <div v-if="presidentRole()" class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
-                            <jet-nav-link href="/posts" :active="route().current('posts.index')">
+                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
+                            <jet-nav-link v-if="$page.user.role_id != 3" href="/posts/create" :active="route().current('post.create')">
                                 日報登録
                             </jet-nav-link>
                         </div>
 
                         <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
-                            <jet-nav-link href="/postlists" :active="route().current('postlists.index')">
+                            <jet-nav-link href="/posts" :active="route().current('post.index')">
                                 日報一覧
                             </jet-nav-link>
                         </div>
                         <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
                             <jet-nav-link href="/mypostlists" :active="route().current('mypostlists.index')">
-                                my日報一覧
+                                My日報一覧
                             </jet-nav-link>
                         </div>
-                        <div v-if="this.$page.user.auth_id == 1" class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
-                            <jet-nav-link href="/employee_create" :active="route().current('employee_create.index')">
-                                社員登録
-                            </jet-nav-link>
-                        </div>
-                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
-                            <jet-nav-link href="/users" :active="route().current('users.index')">
-                                社員一覧
-                            </jet-nav-link>
-                        </div>
-                        <div v-if="this.$page.user.current_team_id == 3 || this.$page.user.current_team_id == 4" class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
-                            <jet-nav-link href="/clients_create" :active="route().current('clients_create.index')">
-                                顧客登録
-                            </jet-nav-link>
-                        </div>
-                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
-                            <jet-nav-link href="/clientlists" :active="route().current('clientlists.index')">
-                                顧客一覧
-                            </jet-nav-link>
-                        </div>
-                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
-                            <jet-nav-link href="/teams/create" :active="route().current('teams.create')">
-                                チーム作成
-                            </jet-nav-link>
-                        </div>
-
-                        <div class="hidden space-x-8 sm:-myt-px sm:ml-10 sm:flex">
-                            <jet-nav-link href="/teamlists" :active="route().current('teamlists.index')">
-                                チーム一覧
-                            </jet-nav-link>
-                        </div>
-
 
                     </div>
                     <!-- Settings Dropdown -->
                     <div class="hidden sm:flex sm:items-center sm:ml-6">
-                        <div class="text-indigo-600">{{ $page.user.current_team.name }}</div>
+                        <div class="header-teamname">{{ $page.user.current_team.name }}</div>
                         <div class="ml-3 relative">
                             <jet-dropdown align="right" width="48">
                                 <template #trigger>
@@ -110,77 +78,60 @@
                                 <template #content>
                                     <!-- Account Management -->
                                     <div class="block px-4 py-2 text-xs text-gray-400">
-                                        Manage Account
+                                        Account
                                     </div>
 
                                     <jet-dropdown-link :href="route('profile.show')">
-                                        Profile
-                                    </jet-dropdown-link>
-
-                                    <jet-dropdown-link
-                                        :href="route('api-tokens.index')"
-                                        v-if="$page.jetstream.hasApiFeatures"
-                                    >
-                                        API Tokens
+                                        プロフィール
                                     </jet-dropdown-link>
 
                                     <div class="border-t border-gray-100"></div>
 
-                                    <!-- Team Management -->
-                                    <template v-if="$page.jetstream.hasTeamFeatures">
-                                        <div class="block px-4 py-2 text-xs text-gray-400">
-                                            Manage Team
-                                        </div>
+                                    <!-- Post -->
+                                    <div class="block px-4 py-2 text-xs text-gray-400">
+                                        Post
+                                    </div>
 
-                                        <!-- Team Settings -->
-                                        <jet-dropdown-link :href="route('teams.show', $page.user.current_team)">
-                                            Team Settings
-                                        </jet-dropdown-link>
+                                    <jet-dropdown-link :href="route('post.create')" v-if="$page.user.role_id != 3">
+                                        日報登録
+                                    </jet-dropdown-link>
 
-                                        <jet-dropdown-link
-                                            :href="route('users.create')"
-                                            v-if="$page.jetstream.canCreateTeam"
-                                        >
-                                            Create New User
-                                        </jet-dropdown-link>
-                                        <jet-dropdown-link
-                                            :href="route('teams.create')"
-                                            v-if="$page.jetstream.canCreateTeams"
-                                        >
-                                            Create New Team
-                                        </jet-dropdown-link>
+                                    <jet-dropdown-link :href="route('post.index')">
+                                        日報一覧
+                                    </jet-dropdown-link>
 
-                                        <div class="border-t border-gray-100"></div>
+                                    <jet-dropdown-link :href="route('mypostlists.index')">
+                                        My日報一覧
+                                    </jet-dropdown-link>
 
-                                        <!-- Team Switcher -->
-                                        <div class="block px-4 py-2 text-xs text-gray-400">
-                                            Switch Teams
-                                        </div>
+                                    <div class="border-t border-gray-100"></div>
 
-                                        <template v-for="team in $page.user.all_teams">
-                                            <form @submit.prevent="switchToTeam(team)" :key="team.id">
-                                                <jet-dropdown-link as="button">
-                                                    <div class="flex items-center">
-                                                        <svg
-                                                            v-if="team.id == $page.user.current_team_id"
-                                                            class="mr-2 h-5 w-5 text-green-400"
-                                                            fill="none"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            stroke="currentColor"
-                                                            viewBox="0 0 24 24"
-                                                        >
-                                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                        </svg>
-                                                        <div>{{ team.name }}</div>
-                                                    </div>
-                                                </jet-dropdown-link>
-                                            </form>
-                                        </template>
+                                    <!-- Management -->
+                                    <div class="block px-4 py-2 text-xs text-gray-400">
+                                        Management
+                                    </div>
 
-                                        <div class="border-t border-gray-100"></div>
-                                    </template>
+                                    <jet-dropdown-link :href="route('teamlist.index')">
+                                        部署一覧
+                                    </jet-dropdown-link>
+
+                                    <jet-dropdown-link :href="route('user.index')">
+                                        社員一覧
+                                    </jet-dropdown-link>
+
+                                    <jet-dropdown-link :href="route('user.create')" v-if="$page.user.auth_id == 1">
+                                        社員登録
+                                    </jet-dropdown-link>
+
+                                    <jet-dropdown-link :href="route('clientlists.index')">
+                                        取引先一覧
+                                    </jet-dropdown-link>
+
+                                    <jet-dropdown-link :href="route('clients_create.index')" v-if="$page.user.current_team_id == 3 || $page.user.current_team_id == 4">
+                                        取引先登録
+                                    </jet-dropdown-link>
+
+
 
                                     <!-- Authentication -->
                                     <form @submit.prevent="logout">
@@ -365,13 +316,6 @@ export default {
                     preserveState: false,
                 },
             );
-        },
-        presidentRole() {
-            if (this.$page.user.role_id == 3) {
-                return false;
-            } else {
-                return true;
-            }
         },
 
         logout() {
