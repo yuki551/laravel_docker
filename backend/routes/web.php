@@ -78,7 +78,8 @@ Route::delete('/posts/{post}', [PostController::class, 'destroy'])
     ->name('post.destroy');
 Route::post('/posts/confirm', [PostController::class, 'confirm'])
     ->name('post.confirm');
-
+Route::get('/posts/confirm', [PostController::class, 'getconfirm'])
+    ->name('post.getconfirm');
 
 Route::get('/users', [UserController::class, 'index'])
     ->name('user.index');

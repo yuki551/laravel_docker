@@ -311,4 +311,9 @@ class PostController extends Controller
         return Inertia::render('Post/Create', ['data' => $data]);
 
     }
+
+    public function getconfirm(){
+        return redirect()->route('post.create');
+    }
+
 }
